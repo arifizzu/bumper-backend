@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 use App\Models\User;
 
@@ -48,7 +50,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
@@ -65,6 +67,8 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
+        $user->assignRole('user');
+        $user->givePermissionTo('delete users');
         $user->save();
 
         return response()->json([
