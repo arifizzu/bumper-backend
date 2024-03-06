@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\FormController;
+use App\Http\Controllers\FormTemplateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,22 @@ Route::prefix('/permissions')->group(function () {
     Route::get('/{id}/edit', [PermissionController::class, 'edit']);
     Route::put('/{id}', [PermissionController::class, 'update']);
     Route::delete('/{id}', [PermissionController::class, 'destroy']);
+    });
+
+Route::prefix('/forms')->group(function () {
+    Route::get('/', [FormController::class, 'index']);
+    Route::get('/create', [FormController::class, 'create']);
+    Route::post('/', [FormController::class, 'store']);
+    Route::get('/{id}', [FormController::class, 'show']);
+    Route::get('/{id}/edit', [FormController::class, 'edit']);
+    Route::put('/{id}', [FormController::class, 'update']);
+    Route::delete('/{id}', [FormController::class, 'destroy']);
+    });
+
+Route::prefix('/forms-template')->group(function () {
+    Route::get('/', [FormTemplateController::class, 'showAllTemplateForm']);    //index
+    Route::post('/', [FormTemplateController::class, 'saveFormAsTemplate']);    //store
+    Route::delete('/{id}', [FormTemplateController::class, 'deleteTemplateForm']);      //destroy
     });
 
 // Route::prefix('/roles')->group(function () {
