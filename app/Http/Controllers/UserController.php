@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 use App\Models\User;
 
@@ -67,8 +65,6 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->assignRole('user');
-        $user->givePermissionTo('delete users');
         $user->save();
 
         return response()->json([
