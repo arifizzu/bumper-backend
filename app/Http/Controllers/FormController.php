@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Form;
@@ -49,7 +50,7 @@ class FormController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'short_name' => 'required|string|max:255',
-            'table_name' => 'string|min:8',
+            'table_name' => 'string|max:255',
         ]);
 
         if ($validator->fails()) {

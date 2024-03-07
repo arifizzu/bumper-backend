@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 
+// use App\Models\FormTemplate;
+
 class Form extends Model
 {
     use HasFactory, SoftDeletes;
@@ -17,4 +19,9 @@ class Form extends Model
         'short_name',
         'table_name',
     ];
+
+    // public function formTemplate()
+    // {
+    //     return $this->belongsTo(FormTemplate::class);
+    // }
 }
