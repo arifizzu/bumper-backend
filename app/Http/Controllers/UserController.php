@@ -79,6 +79,10 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
+        // $user = QueryBuilder::for(User::class)
+        //     ->where('id', $id)
+        //     ->first();
+        
         $user = User::where('id', $id)->first();
 
         if (!$user){
