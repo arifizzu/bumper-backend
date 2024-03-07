@@ -7,6 +7,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\FormTemplateController;
+use App\Http\Controllers\FieldTypeController;
+use App\Http\Controllers\FieldController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +70,20 @@ Route::prefix('/forms-template')->group(function () {
     Route::get('/', [FormTemplateController::class, 'showAllTemplateForm']);    //index
     Route::post('/', [FormTemplateController::class, 'saveFormAsTemplate']);    //store
     Route::delete('/{id}', [FormTemplateController::class, 'deleteTemplateForm']);      //destroy
+    });
+
+Route::prefix('/fields-types')->group(function () {
+    Route::get('/', [FieldTypeController::class, 'showAllFieldTypes']);    //index
+    });
+
+Route::prefix('/fields')->group(function () {
+    Route::get('/{id}', [FieldController::class, 'index']);
+    Route::get('/{id}/create', [FieldController::class, 'create']);
+    Route::post('/', [FieldController::class, 'store']);
+    Route::get('/individual/{id}', [FieldController::class, 'show']);
+    Route::get('/individual/{id}/edit', [FieldController::class, 'edit']);
+    Route::put('/individual/{id}', [FieldController::class, 'update']);
+    Route::delete('/individual/{id}', [FieldController::class, 'destroy']);
     });
 
 // Route::prefix('/roles')->group(function () {
