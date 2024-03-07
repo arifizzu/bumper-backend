@@ -20,11 +20,11 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('forms_template', function (Blueprint $table) {
+        Schema::create('forms_templates', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('form_id');
             $table->foreign('form_id')
-                ->references('id') // form id
+                ->references('id')                  // form id
                 ->on('forms')
                 ->onDelete('cascade');
             $table->timestamps();
@@ -38,9 +38,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('forms');
-        Schema::dropIfExists('forms_template');
-        // Schema::dropIfExists('fields');
-        // Schema::dropIfExists('fields_type');
-        // Schema::dropIfExists('fields_lists_values');
+        Schema::dropIfExists('forms_templates');
     }
 };
