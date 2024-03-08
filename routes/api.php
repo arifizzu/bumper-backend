@@ -9,6 +9,7 @@ use App\Http\Controllers\FormController;
 use App\Http\Controllers\FormTemplateController;
 use App\Http\Controllers\FieldTypeController;
 use App\Http\Controllers\FieldController;
+use App\Http\Controllers\FieldListValueController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +86,18 @@ Route::prefix('/fields')->group(function () {
     Route::put('/individual/{id}', [FieldController::class, 'update']);
     Route::delete('/individual/{id}', [FieldController::class, 'destroy']);
     });
+
+Route::prefix('/fields-values')->group(function () {
+    Route::get('/{id}', [FieldListValueController::class, 'index']);
+    Route::get('/{id}/create', [FieldListValueController::class, 'create']);
+    Route::post('/{id}', [FieldListValueController::class, 'store']);
+    Route::get('/individual/{id}', [FieldListValueController::class, 'show']);
+    Route::get('/individual/{id}/edit', [FieldListValueController::class, 'edit']);
+    Route::put('/individual/{id}', [FieldListValueController::class, 'update']);
+    Route::delete('/individual/{id}', [FieldListValueController::class, 'destroy']);
+    });
+
+    
 
 // Route::prefix('/roles')->group(function () {
 //     Route::get('/', [RoleController::class, 'index'])->middleware(['permissions:view role']);

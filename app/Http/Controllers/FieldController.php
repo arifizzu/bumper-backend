@@ -123,7 +123,6 @@ class FieldController extends Controller
             'message' => 'Get field successfully',
             'data' => $field,
         ], Response::HTTP_OK);
-    // }
     }
 
     /**
@@ -131,7 +130,7 @@ class FieldController extends Controller
      */
     public function edit(string $id)
     {
-         $field = Field::where('id', $id)->first();
+        $field = Field::where('id', $id)->first();
 
         if (!$field){
             return response()->json([
