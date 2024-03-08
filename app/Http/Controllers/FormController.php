@@ -19,6 +19,12 @@ class FormController extends Controller
     public function index(Request $request)
     {
         $forms = Form::all();
+
+        $forms = QueryBuilder::for(Form::class)
+            ->with([
+                'fields',
+            ])->get();
+        
         return response()->json([
             'success' => true,
             'message' => 'Get forms successfully',
@@ -78,7 +84,11 @@ class FormController extends Controller
      */
     public function show(string $id)
     {
-        $form = Form::where('id', $id)->first();
+        $form = QueryBuilder::for(Form::class)
+            ->where('id', $id)
+            ->with([
+                'fields',
+            ])->first();
 
         if (!$form){
             return response()->json([

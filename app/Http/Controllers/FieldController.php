@@ -18,7 +18,14 @@ class FieldController extends Controller
      */
     public function index(Request $request, string $formId)
     {
-        $fields = Field::where('form_id', $formId)->get();
+        $fields = QueryBuilder::for(Field::class)
+            ->where('form_id', $formId)
+            ->with([
+                'fieldType',
+                'form',
+                'listValues',
+            ])->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Get fields successfully',
@@ -96,7 +103,13 @@ class FieldController extends Controller
      */
     public function show(string $id)
     {
-        $field = Field::where('id', $id)->first();
+        $field = QueryBuilder::for(Field::class)
+            ->where('id', $id)
+            ->with([
+                'fieldType',
+                'form',
+                'listValues',
+            ])->first();
 
         if (!$field){
             return response()->json([

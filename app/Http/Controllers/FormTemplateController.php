@@ -18,7 +18,11 @@ class FormTemplateController extends Controller
      */
     public function showAllTemplateForm(Request $request)   //index
     {
-        $formTemplate = FormTemplate::all();
+        $formTemplate = QueryBuilder::for(FormTemplate::class)
+            ->with([
+                'form',
+            ])->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Get template forms successfully',
@@ -32,7 +36,12 @@ class FormTemplateController extends Controller
     public function saveFormAsTemplate(Request $request)    //store
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|integer|exists:forms,id',      //form_id
+            'id' => [
+                'required',
+                'integer',
+                'exists:forms,id',      //form_id
+                Rule::unique('forms_templates', 'form_id'),
+            ]
         ]);
 
         if ($validator->fails()) {
