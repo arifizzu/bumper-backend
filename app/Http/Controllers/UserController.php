@@ -19,7 +19,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::all();
+        $users = QueryBuilder::for(User::class)
+            ->with([
+                'roles',
+                'permissions',
+            ])->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Get user successfully',
@@ -79,11 +84,12 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        // $user = QueryBuilder::for(User::class)
-        //     ->where('id', $id)
-        //     ->first();
-        
-        $user = User::where('id', $id)->first();
+        $user = QueryBuilder::for(User::class)
+            ->where('id', $id)
+            ->with([
+                'roles',
+                'permissions',
+            ])->first();
 
         if (!$user){
             return response()->json([

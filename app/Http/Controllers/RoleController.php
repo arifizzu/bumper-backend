@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
@@ -16,7 +18,11 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::all();
+        $roles = QueryBuilder::for(Role::class)
+            ->with([
+                'permissions',
+            ])->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Get roles successfully',
@@ -70,7 +76,11 @@ class RoleController extends Controller
      */
     public function show(string $id)
     {
-        $role = Role::where('id', $id)->first();
+        $role = QueryBuilder::for(Role::class)
+            ->where('id', $id)
+            ->with([
+                'permissions',
+            ])->first();
 
         if (!$role){
             return response()->json([
