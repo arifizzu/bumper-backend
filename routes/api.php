@@ -11,6 +11,8 @@ use App\Http\Controllers\FieldTypeController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\FieldListValueController;
 use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\ActivityRelationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +108,26 @@ Route::prefix('/processes')->group(function () {
     Route::get('/{id}/edit', [ProcessController::class, 'edit']);
     Route::put('/{id}', [ProcessController::class, 'update']);
     Route::delete('/{id}', [ProcessController::class, 'destroy']);
+    });
+
+Route::prefix('/activities')->group(function () {
+    Route::get('/', [ActivityController::class, 'index']);
+    Route::get('/create', [ActivityController::class, 'create']);
+    Route::post('/', [ActivityController::class, 'store']);
+    Route::get('/{id}', [ActivityController::class, 'show']);
+    Route::get('/{id}/edit', [ActivityController::class, 'edit']);
+    Route::put('/{id}', [ActivityController::class, 'update']);
+    Route::delete('/{id}', [ActivityController::class, 'destroy']);
+    });
+
+Route::prefix('/activities-relations')->group(function () {
+    Route::get('/', [ActivityRelationController::class, 'index']);
+    Route::get('/create', [ActivityRelationController::class, 'create']);
+    Route::post('/', [ActivityRelationController::class, 'store']);
+    Route::get('/{id}', [ActivityRelationController::class, 'show']);
+    Route::get('/{id}/edit', [ActivityRelationController::class, 'edit']);
+    Route::put('/{id}', [ActivityRelationController::class, 'update']);
+    Route::delete('/{id}', [ActivityRelationController::class, 'destroy']);
     });
     
 

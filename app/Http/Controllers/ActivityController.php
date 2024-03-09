@@ -9,25 +9,26 @@ use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
-use App\Models\Process;
+use App\Models\Activity;
 
-class ProcessController extends Controller
+class ActivityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $processes = QueryBuilder::for(Process::class)
+        $activities = QueryBuilder::for(Activity::class)
             ->with([
-                'activities',
+                'process',
+                'relations',
             ])
             ->get();
         
         return response()->json([
             'success' => true,
             'message' => 'Get process successfully',
-            'data' => $processes,
+            'data' => $activities,
         ], Response::HTTP_OK);
     }
 
@@ -38,10 +39,13 @@ class ProcessController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => 'Get process form successfully',
+            'message' => 'Get activity form successfully',
             'form' => [
                 'name' => '',
-                'short_name' => '',
+                'process_id' => '',
+                'form_id' => '',
+                'reference_id' => '',
+                'status' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -52,8 +56,11 @@ class ProcessController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:processes',
-            'short_name' => 'required|string|max:255|unique:processes',
+            'name' => 'required|string|max:255',
+            'process_id' => 'required|integer|exists:processes,id',
+            'form_id' => 'nullable|integer|exists:forms,id',
+            'reference_id' => 'nullable|integer|exists:activities,id',
+            'status' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -63,15 +70,18 @@ class ProcessController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $process = new Process();
-        $process->name = $request->name;
-        $process->short_name = $request->short_name;
-        $process->save();
+        $activity = new Activity();
+        $activity->name = $request->name;
+        $activity->process_id = $request->process_id;
+        $activity->form_id = $request->form_id;
+        $activity->reference_id = $request->reference_id;
+        $activity->status = $request->status;
+        $activity->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Process created successfully',
-            'data' => $process,
+            'message' => 'Activity created successfully',
+            'data' => $activity,
         ], Response::HTTP_CREATED);
     }
 
@@ -80,24 +90,25 @@ class ProcessController extends Controller
      */
     public function show(string $id)
     {
-        $process = QueryBuilder::for(Process::class)
+        $activity = QueryBuilder::for(Activity::class)
             ->where('id', $id)
             ->with([
-                'activities',
+                 'process',
+                'relations',
             ])
             ->first();
 
-        if (!$process){
+        if (!$activity){
             return response()->json([
             'success' => true,
-            'message' => 'Process not found',
+            'message' => 'Activity not found',
         ], Response::HTTP_NOT_FOUND);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Get process successfully',
-            'data' => $process,
+            'message' => 'Get activity successfully',
+            'data' => $activity,
         ], Response::HTTP_OK);
     }
 
@@ -106,21 +117,24 @@ class ProcessController extends Controller
      */
     public function edit(string $id)
     {
-        $process = Process::where('id', $id)->first();
+        $activity = Activity::where('id', $id)->first();
 
-        if (!$process){
+        if (!$activity){
             return response()->json([
             'success' => true,
-            'message' => 'Process not found',
+            'message' => 'Activity not found',
         ], Response::HTTP_NOT_FOUND);
         }
 
          return response()->json([
             'success' => true,
-            'message' => 'Get process successfully',
+            'message' => 'Get activity successfully',
             'form' => [
-                'name' => $process->name,
-                'short_name' => $process->short_name,
+                'name' => $activity->name,
+                'process_id' => $activity->process_id,
+                'form_id' => $activity->form_id,
+                'reference_id' => $activity->reference_id,
+                'status' => $activity->status,
             ],
         ], Response::HTTP_OK);
     }
@@ -131,18 +145,11 @@ class ProcessController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('processes')->ignore($request->id),
-            ],
-            'short_name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('processes')->ignore($request->id),
-            ],
+            'name' => 'required|string|max:255',
+            'process_id' => 'required|integer|exists:processes,id',
+            'form_id' => 'nullable|integer|exists:forms,id',
+            'reference_id' => 'nullable|integer|exists:activities,id',
+            'status' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -152,23 +159,26 @@ class ProcessController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         
-        $process = Process::find($id);
+        $activity = Activity::find($id);
 
-        if (!$process) {
+        if (!$activity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Process not found.',
+                'message' => 'Activity not found.',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $process->name = $request->name;
-        $process->short_name = $request->short_name;
-        $process->save();
+        $activity->name = $request->name;
+        $activity->process_id = $request->process_id;
+        $activity->form_id = $request->form_id;
+        $activity->reference_id = $request->reference_id;
+        $activity->status = $request->status;
+        $activity->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Process updated successfully',
-            'data' => $process,
+            'message' => 'Activity updated successfully',
+            'data' => $activity,
         ], Response::HTTP_CREATED);
     }
 
@@ -177,19 +187,19 @@ class ProcessController extends Controller
      */
     public function destroy(string $id)
     {
-        $process = Process::find($id);
+        $activity = Activity::find($id);
 
-        if (!$process) {
+        if (!$activity) {
             return response()->json([
                 'success' => false,
-                'message' => 'Process not found.',
+                'message' => 'Activity not found.',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $process->delete();
+        $activity->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Process deleted successfully.',
+            'message' => 'Activity deleted successfully.',
         ], Response::HTTP_OK);
     }
 }
