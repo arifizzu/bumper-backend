@@ -18,8 +18,6 @@ class FormController extends Controller
      */
     public function index(Request $request)
     {
-        $forms = Form::all();
-
         $forms = QueryBuilder::for(Form::class)
             ->with([
                 'fields',
