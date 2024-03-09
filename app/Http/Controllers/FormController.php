@@ -54,7 +54,7 @@ class FormController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'short_name' => 'required|string|max:255',
-            'table_name' => 'string|max:255',
+            'table_name' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -135,7 +135,7 @@ class FormController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'short_name' => 'required|string|max:255',
-            'table_name' => 'string|min:8',
+            'table_name' => 'nullable|string|min:8',
         ]);
 
 
