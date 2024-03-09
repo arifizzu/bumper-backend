@@ -10,6 +10,7 @@ use App\Http\Controllers\FormTemplateController;
 use App\Http\Controllers\FieldTypeController;
 use App\Http\Controllers\FieldController;
 use App\Http\Controllers\FieldListValueController;
+use App\Http\Controllers\ProcessController;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +98,15 @@ Route::prefix('/fields-values')->group(function () {
     Route::delete('/individual/{id}', [FieldListValueController::class, 'destroy']);
     });
 
+Route::prefix('/processes')->group(function () {
+    Route::get('/', [ProcessController::class, 'index']);
+    Route::get('/create', [ProcessController::class, 'create']);
+    Route::post('/', [ProcessController::class, 'store']);
+    Route::get('/{id}', [ProcessController::class, 'show']);
+    Route::get('/{id}/edit', [ProcessController::class, 'edit']);
+    Route::put('/{id}', [ProcessController::class, 'update']);
+    Route::delete('/{id}', [ProcessController::class, 'destroy']);
+    });
     
 
 // Route::prefix('/roles')->group(function () {
