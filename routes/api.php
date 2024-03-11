@@ -13,6 +13,7 @@ use App\Http\Controllers\FieldListValueController;
 use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityRelationController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,6 +129,13 @@ Route::prefix('/activities-relations')->group(function () {
     Route::get('/{id}/edit', [ActivityRelationController::class, 'edit']);
     Route::put('/{id}', [ActivityRelationController::class, 'update']);
     Route::delete('/{id}', [ActivityRelationController::class, 'destroy']);
+    });
+
+Route::prefix('/auth')->group(function () {
+    Route::post('/login', [AuthController::class, 'login'])->middleware('api');
+    Route::post('/logout', [AuthController::class, 'logout'])->middleware('api');
+    Route::post('/refresh', [AuthController::class, 'refresh'])->middleware('api');
+    Route::post('/me', [AuthController::class, 'me'])->middleware('api');
     });
     
 
