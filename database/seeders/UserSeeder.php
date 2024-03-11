@@ -16,13 +16,18 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $admin = User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+        ]);
+        $admin->assignRole('admin');
+
         $user = User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
-
         $user->assignRole('user');
-        $user->givePermissionTo('delete users');
+        $user->givePermissionTo('view user');
 
         User::factory()->count(10)->create();
     }

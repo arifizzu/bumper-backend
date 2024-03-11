@@ -13,29 +13,29 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        Permission::create(['name' => 'view users']);
-        Permission::create(['name' => 'create users']);
-        Permission::create(['name' => 'edit users']);
-        Permission::create(['name' => 'delete users']);
+        Permission::create(['name' => 'view user']);
+        Permission::create(['name' => 'create user']);
+        Permission::create(['name' => 'edit user']);
+        Permission::create(['name' => 'delete user']);
 
-        Permission::create(['name' => 'view roles']);
-        Permission::create(['name' => 'create roles']);
-        Permission::create(['name' => 'edit roles']);
-        Permission::create(['name' => 'delete roles']);
+        Permission::create(['name' => 'view role']);
+        Permission::create(['name' => 'create role']);
+        Permission::create(['name' => 'edit role']);
+        Permission::create(['name' => 'delete role']);
 
-        Permission::create(['name' => 'view permissions']);
-        Permission::create(['name' => 'create permissions']);
-        Permission::create(['name' => 'edit permissions']);
-        Permission::create(['name' => 'delete permissions']);
+        Permission::create(['name' => 'view permission']);
+        Permission::create(['name' => 'create permission']);
+        Permission::create(['name' => 'edit permission']);
+        Permission::create(['name' => 'delete permission']);
 
-        Permission::create(['name' => 'view forms']);
-        Permission::create(['name' => 'create forms']);
-        Permission::create(['name' => 'edit forms']);
-        Permission::create(['name' => 'delete forms']);
+        Permission::create(['name' => 'view form']);
+        Permission::create(['name' => 'create form']);
+        Permission::create(['name' => 'edit form']);
+        Permission::create(['name' => 'delete form']);
 
-        Permission::create(['name' => 'view processes']);
-        Permission::create(['name' => 'create processes']);
-        Permission::create(['name' => 'edit processes']);
-        Permission::create(['name' => 'delete processes']);
+        Permission::create(['name' => 'view process']);
+        Permission::create(['name' => 'create process']);
+        Permission::create(['name' => 'edit process']);
+        Permission::create(['name' => 'delete process']);
     }
 }
