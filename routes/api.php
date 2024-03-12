@@ -31,11 +31,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/auth')->group(function () {
+    Route::get('/signup', [AuthController::class, 'signUp']);
     Route::post('/login', [AuthController::class, 'login']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
-    })->middleware(['auth:api']);
+    });
 
 Route::prefix('/users')->middleware(['auth:api'])->group(function () {
         Route::get('/', [UserController::class, 'index'])->middleware(['permission:view user']);
