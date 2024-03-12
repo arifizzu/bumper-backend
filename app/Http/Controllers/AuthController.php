@@ -33,16 +33,33 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
+    // public function login()
+    // {
+    //     $credentials = request(['email', 'password']);
+
+    //     if (! $token = auth()->attempt($credentials)) {
+    //         return response()->json(['error' => 'Unauthorized'], 401);
+    //     }
+
+    //     return $this->respondWithToken($token);
+    // }
     public function login()
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'Email not found'], 401);
         }
 
-        return $this->respondWithToken($token);
+        if (!auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Wrong password'], 401);
+        }
+
+        return $this->respondWithToken(auth()->user());
     }
+
 
     /**
      * Get the authenticated User.
