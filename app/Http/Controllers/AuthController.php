@@ -47,7 +47,14 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        $user = User::where('email', $credentials['email'])->first();
+        // $user = User::where('email', $credentials['email'])->first();
+
+        $user = QueryBuilder::for(User::class)
+            ->where('email', $credentials['email'])
+            ->with([
+                'roles',
+                'permissions',
+            ])->first();
 
         if (!$user) {
             return response()->json(['error' => 'Email not found'], 401);
@@ -57,9 +64,17 @@ class AuthController extends Controller
             return response()->json(['error' => 'Wrong password'], 401);
         }
 
-        return $this->respondWithToken(auth()->user());
-    }
+        $token = auth()->attempt($credentials);
 
+        return response()->json([
+            'user' => auth()->user(),
+            'roles' => $user->roles,
+            'permissions' => $user->permissions,
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60
+        ], Response::HTTP_OK);
+    }
 
     /**
      * Get the authenticated User.
