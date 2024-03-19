@@ -20,6 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = QueryBuilder::for(User::class)
+        ->where('id', '!=', 1)
             ->with([
                 'roles',
                 'permissions',
