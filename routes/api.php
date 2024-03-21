@@ -14,6 +14,7 @@ use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityRelationController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DatabaseRetrievalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,12 @@ use App\Http\Controllers\AuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::prefix('/database')->middleware(['auth:api'])->group(function () {
+    Route::get('/tables', [DatabaseRetrievalController::class, 'getTables'])->middleware(['permission:create form']);
+    Route::get('/columns', [DatabaseRetrievalController::class, 'getColumns'])->middleware(['permission:create form']);
+    // Route::get('/columns/{tableName}', [DatabaseRetrievalController::class, 'getColumns']);
+    });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
