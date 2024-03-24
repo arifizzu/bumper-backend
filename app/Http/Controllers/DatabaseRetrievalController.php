@@ -27,6 +27,16 @@ class DatabaseRetrievalController extends Controller
     {
         $tableName = $request->tableName;
         $columns = Schema::getColumnListing($tableName);
+
+         if (!$columns){
+            return response()->json([
+            'success' => true,
+            'message' => 'Columns not found',
+        ], Response::HTTP_NOT_FOUND);
+        }
+
+        // sort($columns);
+
         return response()->json([
             'success' => true,
             'message' => 'Get database column for table ' . $tableName . ' successfully',
