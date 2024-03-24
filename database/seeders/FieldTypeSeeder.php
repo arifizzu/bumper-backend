@@ -26,11 +26,14 @@ class FieldTypeSeeder extends Seeder
         FieldType::create([
             'name' => 'Checkbox',
         ]);
-        FieldType::create([
-            'name' => 'Checkbox Group',
-        ]);
+        // FieldType::create([
+        //     'name' => 'Checkbox Group',
+        // ]);
         FieldType::create([
             'name' => 'Radio Button',
+        ]);
+        FieldType::create([
+            'name' => 'Switch',
         ]);
         FieldType::create([
             'name' => 'Dropdown',
@@ -38,6 +41,7 @@ class FieldTypeSeeder extends Seeder
         FieldType::create([
             'name' => 'File Upload',
         ]);
+ 
         FieldType::create([
             'name' => 'Date Picker',
         ]);
@@ -50,11 +54,11 @@ class FieldTypeSeeder extends Seeder
         FieldType::create([
             'name' => 'Password Input',
         ]);
-        FieldType::create([
-            'name' => 'Range Slider',
-        ]);
-        FieldType::create([
-            'name' => 'Hidden Input',
-        ]);
+        // FieldType::create([
+        //     'name' => 'Range Slider',
+        // ]);
+        // FieldType::create([
+        //     'name' => 'Hidden Input',
+        // ]);
     }
 }

@@ -30,7 +30,7 @@ class UserSeeder extends Seeder
 
         $user2 = User::factory()->create([
             'name' => 'Test User 2',
-            'email' => 'test@example.com',
+            'email' => 'test2@example.com',
         ]);
         $user2->assignRole('user');
         $user->givePermissionTo('view user');

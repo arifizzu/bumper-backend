@@ -53,7 +53,8 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'short_name' => 'required|string|max:255',
+            'short_name' => 'required|string|max:255|unique:forms',
+            // 'short_name' => 'required|string|max:255',
             'table_name' => 'nullable|string|max:255',
         ]);
 
@@ -134,7 +135,12 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'short_name' => 'required|string|max:255',
+            'short_name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('forms')->ignore($request->id),
+            ],
             'table_name' => 'nullable|string|min:8',
         ]);
 
