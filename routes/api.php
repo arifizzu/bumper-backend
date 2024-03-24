@@ -30,7 +30,7 @@ use App\Http\Controllers\DatabaseRetrievalController;
 Route::prefix('/database')->middleware(['auth:api'])->group(function () {
     Route::get('/tables', [DatabaseRetrievalController::class, 'getTables'])->middleware(['permission:create form']);
     Route::get('/columns', [DatabaseRetrievalController::class, 'getColumns'])->middleware(['permission:create form']);
-    // Route::get('/columns/{tableName}', [DatabaseRetrievalController::class, 'getColumns']);
+    Route::get('/latestId', [DatabaseRetrievalController::class, 'getLatestId'])->middleware(['permission:create form']);
     });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

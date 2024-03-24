@@ -43,4 +43,23 @@ class DatabaseRetrievalController extends Controller
             'data' => $columns,
         ], Response::HTTP_OK);
     }
+
+    public function getLatestId(Request $request) {
+         $tableName = $request->tableName;
+        $latestId = DB::table($tableName)->max('id');
+
+        if (!$latestId){
+            return response()->json([
+            'success' => true,
+            'message' => 'Latest id not found for table ' . $tableName,
+        ], Response::HTTP_NOT_FOUND);
+        }
+
+    return response()->json([
+            'success' => true,
+            'message' => 'Latest id found successfully for table ' . $tableName,
+            'data' => $latestId,
+        ], Response::HTTP_OK);
+    }
+
 }

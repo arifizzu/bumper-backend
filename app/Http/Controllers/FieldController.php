@@ -62,7 +62,8 @@ class FieldController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'caption' => 'required|string|max:255',
-            'form_id' => 'required|integer|exists:forms,id',
+            // 'form_id' => 'required|integer|exists:forms,id',
+            'form_id' => 'required|integer',
             'type_id' => 'required|integer|exists:fields_types,id',
             'is_required' => 'required|boolean',
             'column_name' => 'string|max:255',
