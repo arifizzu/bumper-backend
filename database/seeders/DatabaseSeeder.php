@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FormSeeder::class);
         $this->call(FieldTypeSeeder::class);
         $this->call(FieldSeeder::class);
+        $this->call(ProcessSeeder::class);
     }
 }
 
