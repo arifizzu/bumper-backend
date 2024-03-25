@@ -15,7 +15,7 @@ class FormSeeder extends Seeder
     public function run(): void
     {
         Form::create([
-            'name' => 'Form Test 1',
+            'name' => 'Registration Form Test 1',
             'short_name' => 'FT-1',
             'table_name' => 'table_test_1',
         ]);

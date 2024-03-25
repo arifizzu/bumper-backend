@@ -15,7 +15,7 @@ class FieldSeeder extends Seeder
     public function run(): void
     {
         Field::create([
-            'caption' => 'Text Input Caption',
+            'caption' => 'First Name',
             'form_id' => 1,
             'type_id' => 1,
             'is_required' => true,
@@ -27,27 +27,51 @@ class FieldSeeder extends Seeder
         ]);
 
         Field::create([
-            'caption' => 'Email Caption',
+            'caption' => 'Last Name',
             'form_id' => 1,
-            'type_id' => 11,
+            'type_id' => 1,
             'is_required' => true,
             'column_name' => 'test column 2',
-            'width' => 4,
-            'height' => 4,
+            'width' => 3,
+            'height' => 3,
             'x_coordinate' => 3,
             'y_coordinate' => 0,
         ]);
 
         Field::create([
-            'caption' => 'Password Caption',
+            'caption' => 'Birthday',
             'form_id' => 1,
-            'type_id' => 12,
+            'type_id' => 9,
+            'is_required' => true,
+            'column_name' => 'test column 5',
+            'width' => 3,
+            'height' => 3,
+            'x_coordinate' => 6,
+            'y_coordinate' => 0,
+        ]);
+
+        Field::create([
+            'caption' => 'Email',
+            'form_id' => 1,
+            'type_id' => 11,
             'is_required' => true,
             'column_name' => 'test column 3',
             'width' => 4,
             'height' => 4,
-            'x_coordinate' => 3,
-            'y_coordinate' => 3,
+            'x_coordinate' => 0,
+            'y_coordinate' => 4,
+        ]);
+
+        Field::create([
+            'caption' => 'Password',
+            'form_id' => 1,
+            'type_id' => 12,
+            'is_required' => true,
+            'column_name' => 'test column 4',
+            'width' => 4,
+            'height' => 4,
+            'x_coordinate' => 4,
+            'y_coordinate' => 4,
         ]);
 
         Field::create([
