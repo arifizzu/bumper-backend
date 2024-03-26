@@ -24,6 +24,7 @@ class ProcessSeeder extends Seeder
         ]);
          Process::create([
             'name' => 'Process Test 3',
+            'short_name' => 'PT-3',
         ]);
     }
 }

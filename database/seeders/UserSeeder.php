@@ -23,14 +23,14 @@ class UserSeeder extends Seeder
         $admin->assignRole('admin');
 
         $user = User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name' => 'Admin 2',
+            'email' => 'admin2@example.com',
         ]);
         $user->assignRole('admin');
 
         $user2 = User::factory()->create([
-            'name' => 'Test User 2',
-            'email' => 'test2@example.com',
+            'name' => 'Staff 1',
+            'email' => 'staff@example.com',
         ]);
         $user2->assignRole('user');
         $user->givePermissionTo('view user');
