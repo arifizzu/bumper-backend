@@ -40,6 +40,7 @@ class RoleController extends Controller
             'message' => 'Get role form successfully',
             'form' => [
                 'name' => '',
+                'permissions' => ''
             ],
         ], Response::HTTP_OK);
     }
@@ -64,10 +65,20 @@ class RoleController extends Controller
         $role->name = $request->name;
         $role->save();
 
+         $permissions = $request->permissions;
+          foreach ($permissions as $permission) {
+                $role->givePermissionTo($permission);
+            }
+
+        $roleData = QueryBuilder::for(Role::class)
+            ->where('name', $role->name)
+            ->with([
+                'permissions',
+            ])->first();
         return response()->json([
             'success' => true,
             'message' => 'Role created successfully',
-            'data' => $role,
+            'data' => $roleData,
         ], Response::HTTP_CREATED);
     }
 
@@ -101,7 +112,12 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        $role = Role::where('id', $id)->first();
+        // $role = Role::where('id', $id)->first();
+         $role = QueryBuilder::for(Role::class)
+            ->where('id', $id)
+            ->with([
+                'permissions',
+            ])->first();
 
         if (!$role){
             return response()->json([
@@ -115,6 +131,7 @@ class RoleController extends Controller
             'message' => 'Get role form successfully',
             'form' => [
                 'name' => $role->name,
+                'permissions'=> $role->permissions,
             ],
         ], Response::HTTP_OK);
     }
@@ -152,10 +169,24 @@ class RoleController extends Controller
         $role->name = $request->name;
         $role->save();
 
+         // Revoke all existing permissions for the role
+        $role->permissions()->detach();
+
+        $permissions = $request->permissions;
+        foreach ($permissions as $permission) {
+                $role->givePermissionTo($permission);
+        }
+
+        $roleData = QueryBuilder::for(Role::class)
+            ->where('name', $role->name)
+            ->with([
+                'permissions',
+            ])->first();
+
         return response()->json([
             'success' => true,
             'message' => 'Role updated successfully',
-            'data' => $role,
+            'data' => $roleData,
         ], Response::HTTP_CREATED);
     }
 
@@ -179,4 +210,42 @@ class RoleController extends Controller
             'message' => 'Role deleted successfully.',
         ], Response::HTTP_OK);
     }
+    
 }
+
+
+//  public function assignPermissionToRole(Request $request, string $id)
+//     {   
+//         try {
+//             $roleName = $request->role;
+//             $permissions = $request->permissions;
+
+//             $role = Role::where('name', $roleName)->first();
+
+//             if (!$role) {
+//                 return response()->json([
+//                     'success' => false,
+//                     'message' => 'Role not found',
+//                 ], Response::HTTP_NOT_FOUND);
+//             }
+
+//              // Revoke all existing permissions for the role
+//             $role->permissions()->detach();
+
+//             // Give each permission to the role
+//             foreach ($permissions as $permission) {
+//                 $role->givePermissionTo($permission);
+//             }
+
+//             return response()->json([
+//                 'success' => true,
+//                 'message' => 'Permissions have been assigned to role',
+//                 'data' => $role,
+//             ], Response::HTTP_CREATED);
+//         } catch (\Exception $e) {
+//             return response()->json([
+//                 'success' => false,
+//                 'message' => 'Error assigning permissions to role: ' . $e->getMessage(),
+//             ], Response::HTTP_INTERNAL_SERVER_ERROR);
+//         }
+//     }
