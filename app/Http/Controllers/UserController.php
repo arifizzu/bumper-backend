@@ -73,10 +73,24 @@ class UserController extends Controller
         $user->password = Hash::make($request->password);
         $user->save();
 
+        if ($request->roles){
+            $roles = $request->roles;
+            foreach ($roles as $role) {
+                $user->assignRole($role);
+            }
+        }
+
+         $userData = QueryBuilder::for(User::class)
+            ->where('name', $user->name)
+            ->with([
+                'roles',
+                'permissions',
+            ])->first();
+
         return response()->json([
             'success' => true,
             'message' => 'User created successfully',
-            'data' => $user,
+            'data' => $userData,
         ], Response::HTTP_CREATED);
     }
 
@@ -111,7 +125,14 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::where('id', $id)->first();
+        $user = QueryBuilder::for(User::class)
+            ->where('id', $id)
+            ->with([
+                'roles',
+                'permissions',
+            ])->first();
+
+        // $user = User::where('id', $id)->first();
 
         if (!$user){
             return response()->json([
@@ -126,6 +147,7 @@ class UserController extends Controller
             'form' => [
                 'name' => $user->name,
                 'email' => $user->email,
+                'roles' => $user->roles,
             ],
         ], Response::HTTP_OK);
     }
@@ -167,10 +189,25 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->save();
 
+        $user->roles()->detach();
+         if ($request->roles){
+            $roles = $request->roles;
+            foreach ($roles as $role) {
+                $user->assignRole($role);
+            }
+        }
+
+         $userData = QueryBuilder::for(User::class)
+            ->where('name', $user->name)
+            ->with([
+                'roles',
+                'permissions',
+            ])->first();
+
         return response()->json([
             'success' => true,
             'message' => 'User updated successfully',
-            'data' => $user,
+            'data' => $userData,
         ], Response::HTTP_CREATED);
     }
 
