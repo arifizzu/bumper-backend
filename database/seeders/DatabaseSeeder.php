@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(FieldTypeSeeder::class);
         $this->call(FieldSeeder::class);
         $this->call(ProcessSeeder::class);
+        $this->call(ConditionSeeder::class);
+        $this->call(ActivitySeeder::class);
+        $this->call(ActivityRelationSeeder::class);
+        $this->call(ParticipantSeeder::class);
     }
 }
 
