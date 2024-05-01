@@ -15,6 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('short_name');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')
+                ->references('id')         // users id
+                ->on('users')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

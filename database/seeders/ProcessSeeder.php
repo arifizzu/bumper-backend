@@ -17,14 +17,17 @@ class ProcessSeeder extends Seeder
         Process::create([
             'name' => 'Process Test 1',
             'short_name' => 'PT-1',
+            'created_by' => 1,
         ]);
         Process::create([
             'name' => 'Process Test 2',
             'short_name' => 'PT-2',
+            'created_by' => 1,
         ]);
          Process::create([
             'name' => 'Process Test 3',
             'short_name' => 'PT-3',
+            'created_by' => 2,
         ]);
     }
 }

@@ -15,6 +15,8 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityRelationController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DatabaseRetrievalController;
+use App\Http\Controllers\ConditionController;
+use App\Http\Controllers\ParticipantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,6 +146,26 @@ Route::prefix('/activities-relations')->middleware(['auth:api'])->group(function
     Route::get('/{id}/edit', [ActivityRelationController::class, 'edit'])->middleware(['permission:edit process']);
     Route::put('/{id}', [ActivityRelationController::class, 'update'])->middleware(['permission:edit process']);
     Route::delete('/{id}', [ActivityRelationController::class, 'destroy'])->middleware(['permission:delete process']);
+    });
+
+Route::prefix('/conditions')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [ConditionController::class, 'index'])->middleware(['permission:view process']);
+    Route::get('/create', [ConditionController::class, 'create'])->middleware(['permission:create process']);
+    Route::post('/', [ConditionController::class, 'store'])->middleware(['permission:create process']);
+    Route::get('/{id}', [ConditionController::class, 'show'])->middleware(['permission:view process']);
+    Route::get('/{id}/edit', [ConditionController::class, 'edit'])->middleware(['permission:edit process']);
+    Route::put('/{id}', [ConditionController::class, 'update'])->middleware(['permission:edit process']);
+    Route::delete('/{id}', [ConditionController::class, 'destroy'])->middleware(['permission:delete process']);
+    });
+
+Route::prefix('/participants')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [ParticipantController::class, 'index'])->middleware(['permission:view process']);
+    Route::get('/create', [ParticipantController::class, 'create'])->middleware(['permission:create process']);
+    Route::post('/', [ParticipantController::class, 'store'])->middleware(['permission:create process']);
+    Route::get('/{id}', [ParticipantController::class, 'show'])->middleware(['permission:view process']);
+    Route::get('/{id}/edit', [ParticipantController::class, 'edit'])->middleware(['permission:edit process']);
+    Route::put('/{id}', [ParticipantController::class, 'update'])->middleware(['permission:edit process']);
+    Route::delete('/{id}', [ParticipantController::class, 'destroy'])->middleware(['permission:delete process']);
     });
 
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Process;
 
@@ -21,6 +22,7 @@ class ProcessController extends Controller
         $processes = QueryBuilder::for(Process::class)
             ->with([
                 'activities',
+                'createdBy',
             ])
             ->get();
         
@@ -42,6 +44,7 @@ class ProcessController extends Controller
             'form' => [
                 'name' => '',
                 'short_name' => '',
+                // 'created_by' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -54,6 +57,7 @@ class ProcessController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255|unique:processes',
             'short_name' => 'required|string|max:255|unique:processes',
+            // 'created_by' => 'required|integer|exists:users,id',
         ]);
 
         if ($validator->fails()) {
@@ -66,6 +70,7 @@ class ProcessController extends Controller
         $process = new Process();
         $process->name = $request->name;
         $process->short_name = $request->short_name;
+        $process->created_by = Auth::id(); 
         $process->save();
 
         return response()->json([
@@ -84,6 +89,7 @@ class ProcessController extends Controller
             ->where('id', $id)
             ->with([
                 'activities',
+                'createdBy',
             ])
             ->first();
 
@@ -121,6 +127,7 @@ class ProcessController extends Controller
             'form' => [
                 'name' => $process->name,
                 'short_name' => $process->short_name,
+                'created_by' => $process->created_by,
             ],
         ], Response::HTTP_OK);
     }
@@ -143,6 +150,11 @@ class ProcessController extends Controller
                 'max:255',
                 Rule::unique('processes')->ignore($request->id),
             ],
+            // 'created_by' => [
+            //     'required',
+            //     'integer',
+            //     Rule::unique('users')->ignore($request->id),
+            // ],
         ]);
 
         if ($validator->fails()) {
@@ -163,6 +175,7 @@ class ProcessController extends Controller
 
         $process->name = $request->name;
         $process->short_name = $request->short_name;
+        // $process->created_by = $request->created_by;
         $process->save();
 
         return response()->json([
@@ -191,5 +204,47 @@ class ProcessController extends Controller
             'success' => true,
             'message' => 'Process deleted successfully.',
         ], Response::HTTP_OK);
+    }
+
+
+    public function insertDataIntoForm(string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'values' => 'required',
+            'form' => 'required',
+            'fields' => 'required',
+        ]);
+
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        // Extract form data
+        $values = $request->input('values');
+        $form = $request->input('form');
+        $fields = $request->input('fields');
+
+        // Construct the SQL query
+        $columns = implode(',', $fields);
+        $placeholders = rtrim(str_repeat('?,', count($fields)), ',');
+        $sql = "INSERT INTO $form ($columns) VALUES ($placeholders)";
+
+        // Execute the query
+        try {
+            DB::insert($sql, $values);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data inserted successfully',
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to insert data',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
