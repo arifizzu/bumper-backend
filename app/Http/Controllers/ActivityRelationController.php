@@ -20,7 +20,9 @@ class ActivityRelationController extends Controller
     {
         $relations = QueryBuilder::for(ActivityRelation::class)
             ->with([
-                'activity',
+                'sourceActivity',
+                'targetActivity',
+                'condition',
             ])
             ->get();
         
@@ -40,8 +42,10 @@ class ActivityRelationController extends Controller
             'success' => true,
             'message' => 'Get activity relation form successfully',
             'form' => [
-                'activity_id' => '',
-                'trigger_id' => '',
+                'source_id' => '',
+                'target_id' => '',
+                'condition_id' => '',
+
             ],
         ], Response::HTTP_OK);
     }
@@ -52,8 +56,9 @@ class ActivityRelationController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'activity_id' => 'required|integer|exists:activities,id',
-            'trigger_id' => 'required|integer|exists:activities,id',
+            'source_id' => 'required|integer|exists:activities,id',
+            'target_id' => 'required|integer|exists:activities,id',
+            'condition_id' => 'integer|exists:conditions,id',
         ]);
 
         if ($validator->fails()) {
@@ -64,8 +69,9 @@ class ActivityRelationController extends Controller
         }
 
         $relation = new ActivityRelation();
-        $relation->activity_id = $request->activity_id;
-        $relation->trigger_id = $request->trigger_id;
+        $relation->source_id = $request->source_id;
+        $relation->target_id = $request->target_id;
+        $relation->condition_id = $request->condition_id;
         $relation->save();
 
         return response()->json([
@@ -83,7 +89,9 @@ class ActivityRelationController extends Controller
          $relation = QueryBuilder::for(ActivityRelation::class)
             ->where('id', $id)
             ->with([
-                'activity',
+                'sourceActivity',
+                'targetActivity',
+                'condition',
             ])
             ->first();
 
@@ -119,8 +127,9 @@ class ActivityRelationController extends Controller
             'success' => true,
             'message' => 'Get activity relation successfully',
             'form' => [
-                'activity_id' => $relation->activity_id,
-                'trigger_id' => $relation->trigger_id,
+                'source_id' => $relation->source_id,
+                'target_id' => $relation->target_id,
+                'condition_id' => $relation->condition_id
             ],
         ], Response::HTTP_OK);
     }
@@ -131,8 +140,9 @@ class ActivityRelationController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'activity_id' => 'required|integer|exists:activities,id',
-            'trigger_id' => 'required|integer|exists:activities,id',
+            'source_id' => 'required|integer|exists:activities,id',
+            'target_id' => 'required|integer|exists:activities,id',
+            'condition_id' => 'integer|exists:conditions,id',
         ]);
 
         if ($validator->fails()) {
@@ -151,8 +161,9 @@ class ActivityRelationController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $relation->activity_id = $request->activity_id;
-        $relation->trigger_id = $request->trigger_id;
+        $relation->source_id = $request->source_id;
+        $relation->target_id = $request->target_id;
+        $relation->condition_id = $request->condition_id;
         $relation->save();
 
         return response()->json([

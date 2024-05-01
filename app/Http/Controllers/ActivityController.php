@@ -22,12 +22,14 @@ class ActivityController extends Controller
             ->with([
                 'process',
                 'relations',
+                'form',
+                'participants',
             ])
             ->get();
         
         return response()->json([
             'success' => true,
-            'message' => 'Get process successfully',
+            'message' => 'Get activity successfully',
             'data' => $activities,
         ], Response::HTTP_OK);
     }
@@ -44,8 +46,11 @@ class ActivityController extends Controller
                 'name' => '',
                 'process_id' => '',
                 'form_id' => '',
-                'reference_id' => '',
                 'status' => '',
+                'width' => '',
+                'height' => '',
+                'x_coordinate' => '',
+                'y_coordinate' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -59,8 +64,11 @@ class ActivityController extends Controller
             'name' => 'required|string|max:255',
             'process_id' => 'required|integer|exists:processes,id',
             'form_id' => 'nullable|integer|exists:forms,id',
-            'reference_id' => 'nullable|integer|exists:activities,id',
             'status' => 'required|string|max:255',
+            'width' => 'required|integer',
+            'height' => 'required|integer',
+            'x_coordinate' => 'required|integer',
+            'y_coordinate' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -74,8 +82,11 @@ class ActivityController extends Controller
         $activity->name = $request->name;
         $activity->process_id = $request->process_id;
         $activity->form_id = $request->form_id;
-        $activity->reference_id = $request->reference_id;
         $activity->status = $request->status;
+        $activity->width = $request->width;
+        $activity->height = $request->height;
+        $activity->x_coordinate = $request->x_coordinate;
+        $activity->y_coordinate = $request->y_coordinate;
         $activity->save();
 
         return response()->json([
@@ -93,8 +104,10 @@ class ActivityController extends Controller
         $activity = QueryBuilder::for(Activity::class)
             ->where('id', $id)
             ->with([
-                 'process',
+                'process',
                 'relations',
+                'form',
+                'participants',
             ])
             ->first();
 
@@ -133,8 +146,11 @@ class ActivityController extends Controller
                 'name' => $activity->name,
                 'process_id' => $activity->process_id,
                 'form_id' => $activity->form_id,
-                'reference_id' => $activity->reference_id,
                 'status' => $activity->status,
+                'width' => $activity->width,
+                'height'=> $activity->height,
+                'x_coordinate' => $activity->x_coordinate,
+                'y_coordinate' => $activity->y_coordinate,
             ],
         ], Response::HTTP_OK);
     }
@@ -148,8 +164,11 @@ class ActivityController extends Controller
             'name' => 'required|string|max:255',
             'process_id' => 'required|integer|exists:processes,id',
             'form_id' => 'nullable|integer|exists:forms,id',
-            'reference_id' => 'nullable|integer|exists:activities,id',
             'status' => 'required|string|max:255',
+            'width' => 'required|integer',
+            'height' => 'required|integer',
+            'x_coordinate' => 'required|integer',
+            'y_coordinate' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -171,8 +190,11 @@ class ActivityController extends Controller
         $activity->name = $request->name;
         $activity->process_id = $request->process_id;
         $activity->form_id = $request->form_id;
-        $activity->reference_id = $request->reference_id;
         $activity->status = $request->status;
+        $activity->width = $request->width;
+        $activity->height = $request->height;
+        $activity->x_coordinate = $request->x_coordinate;
+        $activity->y_coordinate = $request->y_coordinate;
         $activity->save();
 
         return response()->json([
