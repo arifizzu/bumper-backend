@@ -10,6 +10,8 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
+
+use App\Http\Controllers\UserLogController;
 use App\Models\Process;
 
 class ProcessController extends Controller
@@ -72,6 +74,9 @@ class ProcessController extends Controller
         $process->short_name = $request->short_name;
         $process->created_by = Auth::id(); 
         $process->save();
+
+        $userLog = new UserLogController();
+        $userLog->insertCreateLog('process', $process->id);
 
         return response()->json([
             'success' => true,
@@ -177,6 +182,9 @@ class ProcessController extends Controller
         $process->short_name = $request->short_name;
         // $process->created_by = $request->created_by;
         $process->save();
+
+        $userLog = new UserLogController();
+        $userLog->insertUpdateLog('process', $process->id);
 
         return response()->json([
             'success' => true,
