@@ -17,16 +17,17 @@ class FormSeeder extends Seeder
         Form::create([
             'name' => 'Registration Form Test 1',
             'short_name' => 'FT-1',
-            'table_name' => 'table_test_1',
+            'created_by' => 1,
         ]);
         Form::create([
             'name' => 'Form Test 2',
             'short_name' => 'FT-2',
-            'table_name' => 'table_test_2',
+            'created_by' => 2,
         ]);
          Form::create([
             'name' => 'Form Test 3',
             'short_name' => 'FT-3',
+            'created_by' => 2,
         ]);
     }
 }

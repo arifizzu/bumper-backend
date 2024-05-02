@@ -9,6 +9,7 @@ use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Http\Controllers\UserLogController;
 use App\Models\Form;
 
 class FormController extends Controller
@@ -70,6 +71,9 @@ class FormController extends Controller
         $form->short_name = $request->short_name;
         $form->table_name = $request->table_name;
         $form->save();
+
+        $userLog = new UserLogController();
+        $userLog->insertCreateLog('form', $form->id);
 
         return response()->json([
             'success' => true,
@@ -166,6 +170,9 @@ class FormController extends Controller
         $form->table_name = $request->table_name;
         $form->save();
 
+        $userLog = new UserLogController();
+        $userLog->insertUpdateLog('form', $form->id);
+
         return response()->json([
             'success' => true,
             'message' => 'Form updated successfully',
@@ -193,7 +200,5 @@ class FormController extends Controller
             'message' => 'Form deleted successfully.',
         ], Response::HTTP_OK);
     }
-
-
 
 }

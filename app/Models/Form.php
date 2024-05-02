@@ -25,8 +25,13 @@ class Form extends Model
         return $this->belongsTo(FormTemplate::class);
     }
 
-        public function fields() : HasMany
+    public function fields() : HasMany
     {
         return $this->hasMany(Field::class);
+    }
+
+    public function activities() : HasMany
+    {
+        return $this->hasMany(Activity::class, 'form_id');
     }
 }

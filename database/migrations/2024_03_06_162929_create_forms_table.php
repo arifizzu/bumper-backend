@@ -11,11 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
+         Schema::create('groups', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')
+                ->references('id')         // users id
+                ->on('users')
+                ->onDelete('cascade');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('short_name');
-            $table->string('table_name')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')
+                ->references('id')                  // group id
+                ->on('groups')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')
+                ->references('id')         // users id
+                ->on('users')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -39,5 +60,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('forms');
         Schema::dropIfExists('forms_templates');
+        Schema::dropIfExists('groups');
     }
 };
