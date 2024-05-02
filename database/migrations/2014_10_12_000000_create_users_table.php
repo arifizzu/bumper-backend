@@ -21,6 +21,20 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('users_logs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')          // user id
+                ->on('users')
+                ->onDelete('cascade');
+            $table->string('action');
+            $table->string('type');
+            $table->unsignedBigInteger('change_id');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -28,6 +42,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('users_logs');
         Schema::dropIfExists('users');
     }
 };

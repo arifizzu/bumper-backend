@@ -81,7 +81,7 @@ class UserController extends Controller
         }
 
          $userData = QueryBuilder::for(User::class)
-            ->where('name', $user->name)
+            ->where('id', $user->id)
             ->with([
                 'roles',
                 'permissions',
@@ -198,7 +198,7 @@ class UserController extends Controller
         }
 
          $userData = QueryBuilder::for(User::class)
-            ->where('name', $user->name)
+            ->where('id', $user->id)
             ->with([
                 'roles',
                 'permissions',
@@ -208,7 +208,7 @@ class UserController extends Controller
             'success' => true,
             'message' => 'User updated successfully',
             'data' => $userData,
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     /**
