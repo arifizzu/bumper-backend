@@ -32,6 +32,7 @@ return new class extends Migration
                 ->on('fields_types')
                 ->onDelete('cascade');
             $table->boolean('is_required');
+            $table->string('table_name')->nullable();
             $table->string('column_name')->nullable();
             $table->integer('width');
             $table->integer('height');
