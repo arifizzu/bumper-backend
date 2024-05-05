@@ -19,6 +19,7 @@ class Field extends Model
         'form_id',
         'type_id',
         'is_required',
+        'table_name',
         'column_name',
         'width',
         'height',

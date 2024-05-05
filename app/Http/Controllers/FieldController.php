@@ -46,6 +46,7 @@ class FieldController extends Controller
                 'form_id' => '',
                 'type_id' => '',
                 'is_required' => '',
+                'table_name' => '',
                 'column_name' => '',
                 'width' => '',
                 'height' => '',
@@ -62,10 +63,11 @@ class FieldController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'caption' => 'required|string|max:255',
-            // 'form_id' => 'required|integer|exists:forms,id',
-            'form_id' => 'required|integer',
+            'form_id' => 'required|integer|exists:forms,id',
+            // 'form_id' => 'required|integer',
             'type_id' => 'required|integer|exists:fields_types,id',
             'is_required' => 'required|boolean',
+            'table_name' => 'string|max:255',
             'column_name' => 'string|max:255',
             'width' => 'required|integer',
             'height' => 'required|integer',
@@ -85,6 +87,7 @@ class FieldController extends Controller
         $field->form_id = $request->form_id;
         $field->type_id = $request->type_id;
         $field->is_required = $request->is_required;
+        $field->table_name = $request->table_name;
         $field->column_name = $request->column_name;
         $field->width = $request->width;
         $field->height = $request->height;
@@ -148,6 +151,7 @@ class FieldController extends Controller
                 'form_id' => $field->form_id,
                 'type_id' => $field->type_id,
                 'is_required' => $field->is_required,
+                'table_name' => $field->table_name,
                 'column_name' => $field->column_name,
                 'width' => $field->width,
                 'height' => $field->height,
@@ -167,6 +171,7 @@ class FieldController extends Controller
             'form_id' => 'required|integer|exists:forms,id',
             'type_id' => 'required|integer|exists:fields_types,id',
             'is_required' => 'required|boolean',
+            'table_name' => 'string|max:255',
             'column_name' => 'string|max:255',
             'width' => 'required|integer',
             'height' => 'required|integer',
@@ -195,6 +200,7 @@ class FieldController extends Controller
         $field->form_id = $request->form_id;
         $field->type_id = $request->type_id;
         $field->is_required = $request->is_required;
+        $field->table_name = $request->table_name;
         $field->column_name = $request->column_name;
         $field->width = $request->width;
         $field->height = $request->height;
