@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 use App\Http\Controllers\UserLogController;
 use App\Models\Form;
@@ -21,7 +22,11 @@ class FormController extends Controller
     {
         $forms = QueryBuilder::for(Form::class)
             ->with([
+                // 'formTemplate',
                 'fields',
+                // 'activities',
+                'group',
+                'createdBy',
             ])->get();
         
         return response()->json([
@@ -42,7 +47,7 @@ class FormController extends Controller
             'form' => [
                 'name' => '',
                 'short_name' => '',
-                'table_name' => '',
+                'group_id' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -56,7 +61,7 @@ class FormController extends Controller
             'name' => 'required|string|max:255',
             // 'short_name' => 'required|string|max:255|unique:forms',
             'short_name' => 'required|string|max:255',
-            'table_name' => 'nullable|string|max:255',
+            'group_id' => 'nullable|integer|exists:groups,id',
         ]);
 
         if ($validator->fails()) {
@@ -69,7 +74,8 @@ class FormController extends Controller
         $form = new Form();
         $form->name = $request->name;
         $form->short_name = $request->short_name;
-        $form->table_name = $request->table_name;
+        $form->group_id = $request->group_id;
+        $form->created_by = Auth::id(); 
         $form->save();
 
         $userLog = new UserLogController();
@@ -90,7 +96,11 @@ class FormController extends Controller
         $form = QueryBuilder::for(Form::class)
             ->where('id', $id)
             ->with([
+                // 'formTemplate',
                 'fields',
+                // 'activities',
+                'group',
+                'createdBy',
             ])->first();
 
         if (!$form){
@@ -127,7 +137,8 @@ class FormController extends Controller
             'form' => [
                 'name' => $form->name,
                 'short_name' => $form->short_name,
-                'table_name' => $form->table_name,
+                'group_id' => $form->group_id,
+                'created_by' => $form->created_by,
             ],
         ], Response::HTTP_OK);
     }
@@ -145,7 +156,7 @@ class FormController extends Controller
                 'max:255',
                 // Rule::unique('forms')->ignore($request->id),
             ],
-            'table_name' => 'nullable|string|min:8',
+            'group_id' => 'nullable|integer|exists:groups,id',
         ]);
 
 
@@ -167,7 +178,7 @@ class FormController extends Controller
 
         $form->name = $request->name;
         $form->short_name = $request->short_name;
-        $form->table_name = $request->table_name;
+        $form->group_id = $request->group_id;
         $form->save();
 
         $userLog = new UserLogController();

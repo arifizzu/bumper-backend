@@ -17,7 +17,8 @@ class Form extends Model
     protected $fillable = [
         'name',
         'short_name',
-        'table_name',
+        'group_id',
+        'created_by',
     ];
 
     public function formTemplate() : BelongsTo
@@ -33,5 +34,15 @@ class Form extends Model
     public function activities() : HasMany
     {
         return $this->hasMany(Activity::class, 'form_id');
+    }
+
+    public function group() : BelongsTo
+    {
+        return $this->belongsTo(Group::class, 'group_id');
+    }
+
+    public function createdBy() : BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }
