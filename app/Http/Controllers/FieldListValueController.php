@@ -52,9 +52,29 @@ class FieldListValueController extends Controller
      */
     public function store(Request $request)
     {
+        // $validator = Validator::make($request->all(), [
+        //     'label' => 'required|string|max:255|unique:fields_lists_values',
+        //     'value' => 'required|string|max:255|unique:fields_lists_values',
+        //     'field_id' => 'required|integer|exists:fields,id',
+        // ]);
+
         $validator = Validator::make($request->all(), [
-            'label' => 'required|string|max:255|unique:fields_lists_values',
-            'value' => 'required|string|max:255|unique:fields_lists_values',
+            'label' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('fields_lists_values')->where(function ($query) use ($request) {
+                    return $query->where('field_id', $request->input('field_id'));
+                }),
+            ],
+            'value' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('fields_lists_values')->where(function ($query) use ($request) {
+                    return $query->where('field_id', $request->input('field_id'));
+                }),
+            ],
             'field_id' => 'required|integer|exists:fields,id',
         ]);
 
@@ -133,21 +153,42 @@ class FieldListValueController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // $validator = Validator::make($request->all(), [
+        //     'label' => [
+        //         'required',
+        //         'string',
+        //         'max:255',
+        //         Rule::unique('fields_lists_values')->ignore($request->id),
+        //     ],
+        //     'value' => [
+        //         'required',
+        //         'string',
+        //         'max:255',
+        //         Rule::unique('fields_lists_values')->ignore($request->id),
+        //     ],
+        //     'field_id' => 'required|integer|exists:fields,id',
+        // ]);
+
         $validator = Validator::make($request->all(), [
             'label' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('fields_lists_values')->ignore($request->id),
+                Rule::unique('fields_lists_values')->where(function ($query) use ($request) {
+                    return $query->where('field_id', $request->input('field_id'));
+                })->ignore($request->id),
             ],
             'value' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('fields_lists_values')->ignore($request->id),
+                Rule::unique('fields_lists_values')->where(function ($query) use ($request) {
+                    return $query->where('field_id', $request->input('field_id'));
+                })->ignore($request->id),
             ],
             'field_id' => 'required|integer|exists:fields,id',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([
