@@ -24,6 +24,7 @@ class GroupController extends Controller
         $groups = QueryBuilder::for(Group::class)
             ->with([
                 'forms',
+                'createdBy',
             ])
             ->get();
 
@@ -54,7 +55,7 @@ class GroupController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:groups',
         ]);
 
         if ($validator->fails()) {
@@ -94,6 +95,7 @@ class GroupController extends Controller
             ->where('id', $id)
             ->with([
                 'forms',
+                'createdBy',
             ])->first();
 
         if (!$group){
@@ -143,7 +145,13 @@ class GroupController extends Controller
     public function update(Request $request, string $id)
     {
          $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            // 'name' => 'required|string|max:255',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('groups')->ignore($request->id),
+            ],
         ]);
 
         if ($validator->fails()) {
