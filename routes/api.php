@@ -17,6 +17,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DatabaseRetrievalController;
 use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\GroupController;
 
 /*
 |--------------------------------------------------------------------------
@@ -76,6 +77,16 @@ Route::prefix('/permissions')->middleware(['auth:api'])->group(function () {
     Route::get('/{id}/edit', [PermissionController::class, 'edit'])->middleware(['permission:edit permission']);
     Route::put('/{id}', [PermissionController::class, 'update'])->middleware(['permission:edit permission']);
     Route::delete('/{id}', [PermissionController::class, 'destroy'])->middleware(['permission:delete permission']);
+    });
+
+Route::prefix('/groups')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [GroupController::class, 'index'])->middleware(['permission:view form']);
+    Route::get('/create', [GroupController::class, 'create'])->middleware(['permission:create form']);
+    Route::post('/', [GroupController::class, 'store'])->middleware(['permission:create form']);
+    Route::get('/{id}', [GroupController::class, 'show'])->middleware(['permission:view form']);
+    Route::get('/{id}/edit', [GroupController::class, 'edit'])->middleware(['permission:edit form']);
+    Route::put('/{id}', [GroupController::class, 'update'])->middleware(['permission:edit form']);
+    Route::delete('/{id}', [GroupController::class, 'destroy'])->middleware(['permission:delete form']);
     });
 
 Route::prefix('/forms')->middleware(['auth:api'])->group(function () {
