@@ -54,6 +54,21 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        // Schema::create('fields_locations', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->unsignedBigInteger('field_id');
+        //     $table->foreign('field_id')
+        //         ->references('id')          // field id
+        //         ->on('fields')
+        //         ->onDelete('cascade');
+        //     $table->integer('width');
+        //     $table->integer('height');
+        //     $table->integer('x_coordinate');
+        //     $table->integer('y_coordinate');
+        //     $table->timestamps();
+        //     $table->softDeletes();
+        // });
     }
 
     /**
@@ -61,6 +76,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Schema::dropIfExists('fields_locations');
         Schema::dropIfExists('fields_lists_values');
         Schema::dropIfExists('fields');
         Schema::dropIfExists('fields_types');
