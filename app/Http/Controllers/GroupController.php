@@ -26,6 +26,7 @@ class GroupController extends Controller
                 'forms',
                 'createdBy',
             ])
+             ->orderBy('name')
             ->get();
 
         return response()->json([
@@ -54,12 +55,25 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string|max:255|unique:groups',
+        // ]);
+
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255|unique:groups',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('groups')->where(function ($query) {
+                    // Ignore soft-deleted records
+                    $query->whereNull('deleted_at');
+                }),
+            ],
         ]);
 
         if ($validator->fails()) {
             return response()->json([
+                'success' => false,
                 'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -150,9 +164,14 @@ class GroupController extends Controller
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('groups')->ignore($request->id),
+                // Rule::unique('groups')->ignore($request->id),
+                Rule::unique('groups')->ignore($request->id)->where(function ($query) {
+                // Ignore soft-deleted records
+                $query->whereNull('deleted_at');
+        }),
             ],
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([
