@@ -16,10 +16,19 @@ class DatabaseRetrievalController extends Controller
     {
         $tables = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
 
+        $tablesToExclude = ['activities', 'activities_relations', 'conditions', 'failed_jobs', 'fields', 'fields_lists_values',
+         'fields_types','forms', 'forms_templates', 'groups', 'migrations', 'model_has_permissions', 'model_has_roles', 'participants',
+         'participant_is_role', 'participant_is_user', 'password_reset_tokens', 'permissions', 'personal_access_tokens', 'processes',
+        'roles', 'role_has_permissions', 'users', 'users_logs'];
+
+        $filteredTables = array_values(array_filter($tables, function ($tableName) use ($tablesToExclude) {
+            return !in_array($tableName, $tablesToExclude);
+        }));
+
         return response()->json([
             'success' => true,
             'message' => 'Get database table successfully',
-            'data' => $tables,
+            'data' => $filteredTables,
         ], Response::HTTP_OK);
     }
 
