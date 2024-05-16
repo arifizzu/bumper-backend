@@ -26,6 +26,20 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('demo_items', function (Blueprint $table) {
+            $table->id();
+            $table->string('item_name')->nullable();
+            $table->unsignedInteger('item_quantity')->nullable();
+            $table->unsignedInteger('item_price')->nullable();
+            $table->date('manufactured_date')->nullable();
+            $table->date('expired_date')->nullable();
+            $table->string('delivered_from')->nullable();
+            $table->string('deliver_to')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -34,5 +48,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('demo_customers');
+         Schema::dropIfExists('demo_items');
     }
 };
