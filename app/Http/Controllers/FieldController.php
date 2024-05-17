@@ -10,6 +10,7 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Field;
+use App\Models\FieldLocation;
 
 class FieldController extends Controller
 {
@@ -24,6 +25,7 @@ class FieldController extends Controller
                 'fieldType',
                 'form',
                 'listValues',
+                'location',
             ])->get();
 
         return response()->json([
@@ -48,10 +50,10 @@ class FieldController extends Controller
                 'is_required' => '',
                 'table_name' => '',
                 'column_name' => '',
-                'width' => '',
-                'height' => '',
-                'x_coordinate' => '',
-                'y_coordinate' => '',
+                // 'width' => '',
+                // 'height' => '',
+                // 'x_coordinate' => '',
+                // 'y_coordinate' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -67,12 +69,12 @@ class FieldController extends Controller
             // 'form_id' => 'required|integer',
             'type_id' => 'required|integer|exists:fields_types,id',
             'is_required' => 'required|boolean',
-            'table_name' => 'string|max:255',
-            'column_name' => 'string|max:255',
-            'width' => 'required|integer',
-            'height' => 'required|integer',
-            'x_coordinate' => 'required|integer',
-            'y_coordinate' => 'required|integer',
+            'table_name' => 'nullable|string|max:255',
+            'column_name' => 'nullable|string|max:255',
+            // 'width' => 'required|integer',
+            // 'height' => 'required|integer',
+            // 'x_coordinate' => 'required|integer',
+            // 'y_coordinate' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -89,16 +91,25 @@ class FieldController extends Controller
         $field->is_required = $request->is_required;
         $field->table_name = $request->table_name;
         $field->column_name = $request->column_name;
-        $field->width = $request->width;
-        $field->height = $request->height;
-        $field->x_coordinate = $request->x_coordinate;
-        $field->y_coordinate = $request->y_coordinate;
+        // $field->width = $request->width;
+        // $field->height = $request->height;
+        // $field->x_coordinate = $request->x_coordinate;
+        // $field->y_coordinate = $request->y_coordinate;
         $field->save();
+
+        $fieldLocation = new FieldLocation();
+        $fieldLocation->field_id = $field->id;
+        $fieldLocation->width = 4;
+        $fieldLocation->height = 2;
+        $fieldLocation->x_coordinate = 0;
+        $fieldLocation->y_coordinate = 0;
+        $fieldLocation->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Field created successfully',
             'data' => $field,
+            'latestFieldId' => $field->id,
         ], Response::HTTP_CREATED);
     }
 
@@ -113,6 +124,7 @@ class FieldController extends Controller
                 'fieldType',
                 'form',
                 'listValues',
+                'location',
             ])->first();
 
         if (!$field){
@@ -153,10 +165,10 @@ class FieldController extends Controller
                 'is_required' => $field->is_required,
                 'table_name' => $field->table_name,
                 'column_name' => $field->column_name,
-                'width' => $field->width,
-                'height' => $field->height,
-                'x_coordinate' => $field->x_coordinate,
-                'y_coordinate' => $field->y_coordinate,
+                // 'width' => $field->width,
+                // 'height' => $field->height,
+                // 'x_coordinate' => $field->x_coordinate,
+                // 'y_coordinate' => $field->y_coordinate,
             ],
         ], Response::HTTP_OK);
     }
@@ -168,15 +180,15 @@ class FieldController extends Controller
     {
          $validator = Validator::make($request->all(), [
             'caption' => 'required|string|max:255',
-            'form_id' => 'required|integer|exists:forms,id',
-            'type_id' => 'required|integer|exists:fields_types,id',
+            // 'form_id' => 'required|integer|exists:forms,id',
+            // 'type_id' => 'required|integer|exists:fields_types,id',
             'is_required' => 'required|boolean',
-            'table_name' => 'string|max:255',
-            'column_name' => 'string|max:255',
-            'width' => 'required|integer',
-            'height' => 'required|integer',
-            'x_coordinate' => 'required|integer',
-            'y_coordinate' => 'required|integer',
+            'table_name' => 'nullable|string|max:255',
+            'column_name' => 'nullable|string|max:255',
+            // 'width' => 'required|integer',
+            // 'height' => 'required|integer',
+            // 'x_coordinate' => 'required|integer',
+            // 'y_coordinate' => 'required|integer',
         ]);
 
 
@@ -197,15 +209,15 @@ class FieldController extends Controller
         }
 
         $field->caption = $request->caption;
-        $field->form_id = $request->form_id;
-        $field->type_id = $request->type_id;
+        // $field->form_id = $request->form_id;
+        // $field->type_id = $request->type_id;
         $field->is_required = $request->is_required;
         $field->table_name = $request->table_name;
         $field->column_name = $request->column_name;
-        $field->width = $request->width;
-        $field->height = $request->height;
-        $field->x_coordinate = $request->x_coordinate;
-        $field->y_coordinate = $request->y_coordinate;
+        // $field->width = $request->width;
+        // $field->height = $request->height;
+        // $field->x_coordinate = $request->x_coordinate;
+        // $field->y_coordinate = $request->y_coordinate;
         $field->save();
 
         return response()->json([

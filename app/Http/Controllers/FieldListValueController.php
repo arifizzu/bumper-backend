@@ -50,7 +50,7 @@ class FieldListValueController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, string $fieldId)
     {
         // $validator = Validator::make($request->all(), [
         //     'label' => 'required|string|max:255|unique:fields_lists_values',
@@ -75,7 +75,7 @@ class FieldListValueController extends Controller
                     return $query->where('field_id', $request->input('field_id'));
                 }),
             ],
-            'field_id' => 'required|integer|exists:fields,id',
+            // 'field_id' => 'required|integer|exists:fields,id',
         ]);
 
         if ($validator->fails()) {
@@ -88,7 +88,7 @@ class FieldListValueController extends Controller
         $fieldListValue = new FieldListValue();
         $fieldListValue->label = $request->label;
         $fieldListValue->value = $request->value;
-        $fieldListValue->field_id = $request->field_id;
+        $fieldListValue->field_id = $fieldId;
         $fieldListValue->save();
 
         return response()->json([
@@ -223,16 +223,20 @@ class FieldListValueController extends Controller
      */
     public function destroy(string $id)
     {
-        $fieldListValue = FieldListValue::find($id);
+         $fieldListValues = QueryBuilder::for(FieldListValue::class)
+            ->where('field_id', $id)
+            ->get();
 
-        if (!$fieldListValue) {
+        if ($fieldListValues->isEmpty()) {
             return response()->json([
                 'success' => false,
-                'message' => 'Value not found.',
+                'message' => 'Values not found.',
             ], Response::HTTP_NOT_FOUND);
         }
+        QueryBuilder::for(FieldListValue::class)
+                ->where('field_id', $id)
+                ->delete();
 
-        $fieldListValue->delete();
         return response()->json([
             'success' => true,
             'message' => 'Value deleted successfully.',

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Field extends Model
 {
@@ -21,10 +22,10 @@ class Field extends Model
         'is_required',
         'table_name',
         'column_name',
-        'width',
-        'height',
-        'x_coordinate',
-        'y_coordinate',
+        // 'width',
+        // 'height',
+        // 'x_coordinate',
+        // 'y_coordinate',
     ];
 
     public function fieldType() : BelongsTo
@@ -39,6 +40,11 @@ class Field extends Model
 
     public function listValues() : HasMany
     {
-        return $this->HasMany(FieldListValue::class);
+        return $this->hasMany(FieldListValue::class);
+    }
+
+    public function location() : HasOne
+    {
+        return $this->hasOne(FieldLocation::class);
     }
 }

@@ -18,6 +18,7 @@ use App\Http\Controllers\DatabaseRetrievalController;
 use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GroupController;
+use App\Http\Controllers\FieldLocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -117,6 +118,16 @@ Route::prefix('/fields')->middleware(['auth:api'])->group(function () {
     Route::get('/individual/{id}/edit', [FieldController::class, 'edit'])->middleware(['permission:edit form']);
     Route::put('/individual/{id}', [FieldController::class, 'update'])->middleware(['permission:edit form']);
     Route::delete('/individual/{id}', [FieldController::class, 'destroy'])->middleware(['permission:delete form']);
+    });
+
+Route::prefix('/fields-locations')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [FieldLocationController::class, 'index'])->middleware(['permission:view form']);
+    Route::get('/create', [FieldLocationController::class, 'create'])->middleware(['permission:create form']);
+    Route::post('/', [FieldLocationController::class, 'store'])->middleware(['permission:create form']);
+    Route::get('/show', [FieldLocationController::class, 'show'])->middleware(['permission:view form']);
+    Route::get('/edit', [FieldLocationController::class, 'edit'])->middleware(['permission:edit form']);
+    Route::put('/update', [FieldLocationController::class, 'update'])->middleware(['permission:edit form']);
+    Route::delete('/delete', [FieldLocationController::class, 'destroy'])->middleware(['permission:delete form']);
     });
 
 Route::prefix('/fields-values')->middleware(['auth:api'])->group(function () {
