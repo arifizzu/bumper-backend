@@ -26,7 +26,7 @@ class GroupController extends Controller
                 'forms',
                 'createdBy',
             ])
-             ->orderBy('name')
+            ->orderBy('name')
             ->get();
 
         return response()->json([
