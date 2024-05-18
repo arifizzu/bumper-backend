@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ActivitySeeder::class);
         $this->call(ActivityRelationSeeder::class);
         $this->call(ParticipantSeeder::class);
+        $this->call(AllFieldFormSeeder::class);
     }
 }
 
