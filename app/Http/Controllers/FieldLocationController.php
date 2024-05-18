@@ -112,7 +112,7 @@ class FieldLocationController extends Controller
             ->first();
 
         $fieldLocation = QueryBuilder::for(FieldLocation::class)
-            ->where('id', $field->id)
+            ->where('field_id', $field->id)
             ->with([
                 'field',
             ])->first();
@@ -208,7 +208,9 @@ class FieldLocationController extends Controller
             ->where('caption', $request->caption)
             ->first();
 
-        $fieldLocation = FieldLocation::find($field->id);
+        $fieldLocation = QueryBuilder::for(FieldLocation::class)
+            ->where('field_id', $field->id)
+            ->first();
 
         if (!$fieldLocation) {
             return response()->json([
@@ -247,7 +249,9 @@ class FieldLocationController extends Controller
             ->where('caption', $request->caption)
             ->first();
 
-        $fieldLocation = FieldLocation::find($field->id);
+        $fieldLocation = QueryBuilder::for(FieldLocation::class)
+            ->where('field_id', $field->id)
+            ->first();
 
         if (!$fieldLocation) {
             return response()->json([
