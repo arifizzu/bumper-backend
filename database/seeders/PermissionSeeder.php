@@ -37,5 +37,10 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'create process']);
         Permission::create(['name' => 'edit process']);
         Permission::create(['name' => 'delete process']);
+
+        Permission::create(['name' => 'view datalist']);
+        Permission::create(['name' => 'create datalist']);
+        Permission::create(['name' => 'edit datalist']);
+        Permission::create(['name' => 'delete datalist']);
     }
 }

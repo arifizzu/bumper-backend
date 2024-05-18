@@ -21,7 +21,8 @@ class RoleSeeder extends Seeder
             'view role', 'create role', 'edit role', 'delete role',
             'view permission', 'create permission', 'edit permission', 'delete permission',
             'view form', 'create form', 'edit form', 'delete form',
-            'view process', 'create process', 'edit process', 'delete process'
+            'view process', 'create process', 'edit process', 'delete process',
+            'view datalist', 'create datalist', 'edit datalist', 'delete datalist'
         );
         
         $userRole->givePermissionTo('view form');
