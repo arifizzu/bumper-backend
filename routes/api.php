@@ -20,6 +20,9 @@ use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\FieldLocationController;
 use App\Http\Controllers\ActivityLocationController;
+use App\Http\Controllers\DataListController;
+use App\Http\Controllers\DataListItemController;
+use App\Http\Controllers\DataListFilterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -201,7 +204,35 @@ Route::prefix('/participants')->middleware(['auth:api'])->group(function () {
     Route::delete('/{id}', [ParticipantController::class, 'destroy'])->middleware(['permission:delete process']);
     });
 
+Route::prefix('/datalist')->middleware(['auth:api'])->group(function () {
+        Route::get('/', [DataListController::class, 'index'])->middleware(['permission:view datalist']);
+        Route::get('/create', [DataListController::class, 'create'])->middleware(['permission:create datalist']);
+        Route::post('/', [DataListController::class, 'store'])->middleware(['permission:create datalist']);
+        Route::get('/{id}', [DataListController::class, 'show'])->middleware(['permission:view datalist']);
+        Route::get('/{id}/edit', [DataListController::class, 'edit'])->middleware(['permission:edit datalist']);
+        Route::put('/{id}', [DataListController::class, 'update'])->middleware(['permission:edit datalist']);
+        Route::delete('/{id}', [DataListController::class, 'destroy'])->middleware(['permission:delete datalist']);
+    });
 
+Route::prefix('/datalist-item')->middleware(['auth:api'])->group(function () {
+        Route::get('/', [DataListItemController::class, 'index'])->middleware(['permission:view datalist']);
+        Route::get('/create', [DataListItemController::class, 'create'])->middleware(['permission:create datalist']);
+        Route::post('/', [DataListItemController::class, 'store'])->middleware(['permission:create datalist']);
+        Route::get('/{id}', [DataListItemController::class, 'show'])->middleware(['permission:view datalist']);
+        Route::get('/{id}/edit', [DataListItemController::class, 'edit'])->middleware(['permission:edit datalist']);
+        Route::put('/{id}', [DataListItemController::class, 'update'])->middleware(['permission:edit datalist']);
+        Route::delete('/{id}', [DataListItemController::class, 'destroy'])->middleware(['permission:delete datalist']);
+    });
+
+Route::prefix('/datalist-filter')->middleware(['auth:api'])->group(function () {
+        Route::get('/', [DataListFilterController::class, 'index'])->middleware(['permission:view datalist']);
+        Route::get('/create', [DataListFilterController::class, 'create'])->middleware(['permission:create datalist']);
+        Route::post('/', [DataListFilterController::class, 'store'])->middleware(['permission:create datalist']);
+        Route::get('/{id}', [DataListFilterController::class, 'show'])->middleware(['permission:view datalist']);
+        Route::get('/{id}/edit', [DataListFilterController::class, 'edit'])->middleware(['permission:edit datalist']);
+        Route::put('/{id}', [DataListFilterController::class, 'update'])->middleware(['permission:edit datalist']);
+        Route::delete('/{id}', [DataListFilterController::class, 'destroy'])->middleware(['permission:delete datalist']);
+    });
 
 // Route::prefix('/roles')->group(function () {
 //     Route::get('/', [RoleController::class, 'index'])->middleware(['permissions:view role']);
