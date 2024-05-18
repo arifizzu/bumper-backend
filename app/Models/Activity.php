@@ -20,10 +20,10 @@ class Activity extends Model
         'process_id',
         'form_id',
         'status',
-        'width',
-        'height',
-        'x_coordinate',
-        'y_coordinate',
+        // 'width',
+        // 'height',
+        // 'x_coordinate',
+        // 'y_coordinate',
     ];
 
     public function process() : BelongsTo
@@ -44,5 +44,10 @@ class Activity extends Model
     public function participants() : HasMany
     {
         return $this->hasMany(Participant::class, 'activity_id');
+    }
+
+        public function location() : HasOne
+    {
+        return $this->hasOne(ActivityLocation::class);
     }
 }

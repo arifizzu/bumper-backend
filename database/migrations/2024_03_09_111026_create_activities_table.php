@@ -35,10 +35,25 @@ return new class extends Migration
                 ->references('id')          // form id
                 ->on('forms')
                 ->onDelete('cascade');
-            $table->integer('width');
-            $table->integer('height');    
-            $table->integer('x_coordinate');
-            $table->integer('y_coordinate');
+            // $table->integer('width');
+            // $table->integer('height');    
+            // $table->integer('x_coordinate');
+            // $table->integer('y_coordinate');
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('activities_locations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('activity_id');
+            $table->foreign('activity_id')
+                ->references('id')          // activity id
+                ->on('activities')
+                ->onDelete('cascade');
+            $table->integer('w');
+            $table->integer('h');    
+            $table->integer('x');
+            $table->integer('y');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -124,6 +139,7 @@ return new class extends Migration
         Schema::dropIfExists('participant_is_role');
         Schema::dropIfExists('participants');
         Schema::dropIfExists('activities_relations');
+        Schema::dropIfExists('activities_locations');
         Schema::dropIfExists('activities');
         Schema::dropIfExists('conditions');
     }

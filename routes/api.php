@@ -19,6 +19,7 @@ use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\FieldLocationController;
+use App\Http\Controllers\ActivityLocationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -151,13 +152,23 @@ Route::prefix('/processes')->middleware(['auth:api'])->group(function () {
     });
 
 Route::prefix('/activities')->middleware(['auth:api'])->group(function () {
-    Route::get('/', [ActivityController::class, 'index'])->middleware(['permission:view process']);
-    Route::get('/create', [ActivityController::class, 'create'])->middleware(['permission:create process']);
+    Route::get('/{id}', [ActivityController::class, 'index'])->middleware(['permission:view process']);
+    Route::get('/{id}/create', [ActivityController::class, 'create'])->middleware(['permission:create process']);
     Route::post('/', [ActivityController::class, 'store'])->middleware(['permission:create process']);
-    Route::get('/{id}', [ActivityController::class, 'show'])->middleware(['permission:view process']);
-    Route::get('/{id}/edit', [ActivityController::class, 'edit'])->middleware(['permission:edit process']);
-    Route::put('/{id}', [ActivityController::class, 'update'])->middleware(['permission:edit process']);
-    Route::delete('/{id}', [ActivityController::class, 'destroy'])->middleware(['permission:delete process']);
+    Route::get('/individual/{id}', [ActivityController::class, 'show'])->middleware(['permission:view process']);
+    Route::get('/individual/{id}/edit', [ActivityController::class, 'edit'])->middleware(['permission:edit process']);
+    Route::put('/individual/{id}', [ActivityController::class, 'update'])->middleware(['permission:edit process']);
+    Route::delete('/individual/{id}', [ActivityController::class, 'destroy'])->middleware(['permission:delete process']);
+    });
+
+Route::prefix('/activities-locations')->middleware(['auth:api'])->group(function () {
+    Route::get('/', [ActivityLocationController::class, 'index'])->middleware(['permission:view process']);
+    Route::get('/create', [ActivityLocationController::class, 'create'])->middleware(['permission:create process']);
+    Route::post('/', [ActivityLocationController::class, 'store'])->middleware(['permission:create process']);
+    Route::get('/show', [ActivityLocationController::class, 'show'])->middleware(['permission:view process']);
+    Route::get('/edit', [ActivityLocationController::class, 'edit'])->middleware(['permission:edit process']);
+    Route::put('/update', [ActivityLocationController::class, 'update'])->middleware(['permission:edit process']);
+    Route::delete('/delete', [ActivityLocationController::class, 'destroy'])->middleware(['permission:delete process']);
     });
 
 Route::prefix('/activities-relations')->middleware(['auth:api'])->group(function () {

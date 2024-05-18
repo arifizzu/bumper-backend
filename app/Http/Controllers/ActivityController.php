@@ -10,20 +10,23 @@ use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Models\Activity;
+use App\Models\ActivityLocation;
 
 class ActivityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request, string $processId)
     {
         $activities = QueryBuilder::for(Activity::class)
+        ->where('process_id', $processId)
             ->with([
                 'process',
                 'relations',
                 'form',
                 'participants',
+                'location',
             ])
             ->get();
         
@@ -47,10 +50,10 @@ class ActivityController extends Controller
                 'process_id' => '',
                 'form_id' => '',
                 'status' => '',
-                'width' => '',
-                'height' => '',
-                'x_coordinate' => '',
-                'y_coordinate' => '',
+                // 'width' => '',
+                // 'height' => '',
+                // 'x_coordinate' => '',
+                // 'y_coordinate' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -64,11 +67,11 @@ class ActivityController extends Controller
             'name' => 'required|string|max:255',
             'process_id' => 'required|integer|exists:processes,id',
             'form_id' => 'nullable|integer|exists:forms,id',
-            'status' => 'required|string|max:255',
-            'width' => 'required|integer',
-            'height' => 'required|integer',
-            'x_coordinate' => 'required|integer',
-            'y_coordinate' => 'required|integer',
+            'status' => 'nullable|string|max:255',
+            // 'width' => 'required|integer',
+            // 'height' => 'required|integer',
+            // 'x_coordinate' => 'required|integer',
+            // 'y_coordinate' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -83,11 +86,19 @@ class ActivityController extends Controller
         $activity->process_id = $request->process_id;
         $activity->form_id = $request->form_id;
         $activity->status = $request->status;
-        $activity->width = $request->width;
-        $activity->height = $request->height;
-        $activity->x_coordinate = $request->x_coordinate;
-        $activity->y_coordinate = $request->y_coordinate;
+        // $activity->width = $request->width;
+        // $activity->height = $request->height;
+        // $activity->x_coordinate = $request->x_coordinate;
+        // $activity->y_coordinate = $request->y_coordinate;
         $activity->save();
+
+        $activityLocation = new ActivityLocation();
+        $activityLocation->activity_id = $activity->id;
+        $activityLocation->w = 4;
+        $activityLocation->h = 2;
+        $activityLocation->x = 0;
+        $activityLocation->y = 0;
+        $activityLocation->save();
 
         return response()->json([
             'success' => true,
@@ -108,6 +119,7 @@ class ActivityController extends Controller
                 'relations',
                 'form',
                 'participants',
+                'location',
             ])
             ->first();
 
@@ -147,10 +159,10 @@ class ActivityController extends Controller
                 'process_id' => $activity->process_id,
                 'form_id' => $activity->form_id,
                 'status' => $activity->status,
-                'width' => $activity->width,
-                'height'=> $activity->height,
-                'x_coordinate' => $activity->x_coordinate,
-                'y_coordinate' => $activity->y_coordinate,
+                // 'width' => $activity->width,
+                // 'height'=> $activity->height,
+                // 'x_coordinate' => $activity->x_coordinate,
+                // 'y_coordinate' => $activity->y_coordinate,
             ],
         ], Response::HTTP_OK);
     }
@@ -164,11 +176,11 @@ class ActivityController extends Controller
             'name' => 'required|string|max:255',
             'process_id' => 'required|integer|exists:processes,id',
             'form_id' => 'nullable|integer|exists:forms,id',
-            'status' => 'required|string|max:255',
-            'width' => 'required|integer',
-            'height' => 'required|integer',
-            'x_coordinate' => 'required|integer',
-            'y_coordinate' => 'required|integer',
+            'status' => 'nullable|string|max:255',
+            // 'width' => 'required|integer',
+            // 'height' => 'required|integer',
+            // 'x_coordinate' => 'required|integer',
+            // 'y_coordinate' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
@@ -191,10 +203,10 @@ class ActivityController extends Controller
         $activity->process_id = $request->process_id;
         $activity->form_id = $request->form_id;
         $activity->status = $request->status;
-        $activity->width = $request->width;
-        $activity->height = $request->height;
-        $activity->x_coordinate = $request->x_coordinate;
-        $activity->y_coordinate = $request->y_coordinate;
+        // $activity->width = $request->width;
+        // $activity->height = $request->height;
+        // $activity->x_coordinate = $request->x_coordinate;
+        // $activity->y_coordinate = $request->y_coordinate;
         $activity->save();
 
         return response()->json([
