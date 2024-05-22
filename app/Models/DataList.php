@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DataList extends Model
 {
@@ -18,6 +19,7 @@ class DataList extends Model
         'title',
         'description',
         'form_id',
+        'group_id',
     ];
 
     public function items() : HasMany
@@ -30,8 +32,18 @@ class DataList extends Model
         return $this->hasMany(DataListFilter::class, 'list_id', 'id');
     }
 
+    public function actions() : HasMany
+    {
+        return $this->hasMany(DataListAction::class, 'list_id', 'id');
+    }
+
     public function form() : HasOne
     {
         return $this->hasOne(Form::class, 'id', 'form_id');
+    }
+
+    public function group() : BelongsTo
+    {
+        return $this->belongsTo(Group::class, 'group_id');
     }
 }

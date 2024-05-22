@@ -20,6 +20,11 @@ return new class extends Migration
                 ->references('id')          // form id
                 ->on('forms')
                 ->onDelete('cascade');
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->foreign('group_id')
+                ->references('id')          // group id
+                ->on('groups')
+                ->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -40,8 +45,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        
+ 
         Schema::create('data_lists_filters', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('list_id');
@@ -56,6 +60,20 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('data_lists_actions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('list_id');
+            $table->foreign('list_id')
+                ->references('id')          // data list id
+                ->on('data_lists')
+                ->onDelete('cascade');
+            $table->string('name');
+            $table->string('segment');
+            $table->integer('order');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -63,6 +81,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('data_lists_actions');
         Schema::dropIfExists('data_lists_filters');
         Schema::dropIfExists('data_lists_items');
         Schema::dropIfExists('data_lists');

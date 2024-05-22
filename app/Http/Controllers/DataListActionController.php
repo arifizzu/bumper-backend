@@ -9,31 +9,26 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\UserLogController;
-use App\Models\Group;
+use App\Models\DataListAction;
 
-class GroupController extends Controller
+class DataListActionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $groups = QueryBuilder::for(Group::class)
-            ->with([
-                'forms',
-                'createdBy',
-                'dataLists',
-            ])
-            ->orderBy('name')
-            ->get();
+        $dataListActions = QueryBuilder::for(DataListAction::class)
+        ->with([
+            'dataList',
+        ])
+        ->get();
 
         return response()->json([
             'success' => true,
-            'message' => 'Get group of forms successfully',
-            'data' => $groups,
+            'message' => 'Get data list actions successfully',
+            'data' => $dataListActions,
         ], Response::HTTP_OK);
     }
 
@@ -44,9 +39,12 @@ class GroupController extends Controller
     {
         return response()->json([
             'success' => true,
-            'message' => 'Get group form successfully',
+            'message' => 'Get data list action form successfully',
             'form' => [
+                'list_id' => '',
                 'name' => '',
+                'segment' => '',
+                'order' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -56,48 +54,38 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'name' => 'required|string|max:255|unique:groups',
-        // ]);
-
         $validator = Validator::make($request->all(), [
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('groups')->where(function ($query) {
-                    // Ignore soft-deleted records
-                    $query->whereNull('deleted_at');
-                }),
-            ],
+            'list_id' => 'required|integer|exists:data_lists,id',
+            'name' => 'required|string|max:255',
+            'segment' => 'required|string|max:255',
+            'order' => 'required|integer',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'success' => false,
                 'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $group = new Group();
-        $group->name = $request->name;
-        $group->created_by = Auth::id(); 
-        $group->save();
+        $dataListAction = new DataListAction();
+        $dataListAction->list_id = $request->list_id;
+        $dataListAction->name = $request->name;
+        $dataListAction->order = $request->order;
+        $dataListAction->segment = $request->segment;
+        $dataListAction->save();
 
-        $userLog = new UserLogController();
-        $userLog->insertCreateLog('group', $group->id);
 
-        $groupData = QueryBuilder::for(Group::class)
-            ->where('id', $group->id)
+        $dataListActionValue = QueryBuilder::for(DataListAction::class)
+            ->where('id', $dataListAction->id)
             ->with([
-                'forms',
+                'dataList',
             ])->first();
 
         return response()->json([
             'success' => true,
-            'message' => 'Group created successfully',
-            'data' => $groupData,
+            'message' => 'Data List Actions created successfully',
+            'data' => $dataListActionValue,
         ], Response::HTTP_CREATED);
     }
 
@@ -106,25 +94,23 @@ class GroupController extends Controller
      */
     public function show(string $id)
     {
-        $group = QueryBuilder::for(Group::class)
+        $dataListAction = QueryBuilder::for(DataListAction::class)
             ->where('id', $id)
             ->with([
-                'forms',
-                'createdBy',
-                'dataLists',
+                'dataList',
             ])->first();
 
-        if (!$group){
+        if (!$dataListAction){
             return response()->json([
             'success' => true,
-            'message' => 'Group not found',
+            'message' => 'Data list actions not found',
         ], Response::HTTP_NOT_FOUND);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Get group successfully',
-            'data' => $group,
+            'message' => 'Get data list actions successfully',
+            'data' => $dataListAction,
         ], Response::HTTP_OK);
     }
 
@@ -133,24 +119,28 @@ class GroupController extends Controller
      */
     public function edit(string $id)
     {
-        $group = QueryBuilder::for(Group::class)
+        $dataListAction = QueryBuilder::for(DataListAction::class)
             ->where('id', $id)
             ->with([
-                'forms',
+                'dataList',
             ])->first();
 
-        if (!$group){
+
+        if (!$dataListAction){
             return response()->json([
             'success' => true,
-            'message' => 'Group not found',
+            'message' => 'Data list action not found',
         ], Response::HTTP_NOT_FOUND);
         }
 
          return response()->json([
             'success' => true,
-            'message' => 'Get group form successfully',
+            'message' => 'Get data list action form successfully',
             'form' => [
-                'name' => $group->name,
+                'list_id' => $dataListAction->list_id,
+                'name' => $dataListAction->name,
+                'order' => $dataListAction->order,
+                'segment' => $dataListAction->segment,
             ],
         ], Response::HTTP_OK);
     }
@@ -160,20 +150,12 @@ class GroupController extends Controller
      */
     public function update(Request $request, string $id)
     {
-         $validator = Validator::make($request->all(), [
-            // 'name' => 'required|string|max:255',
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                // Rule::unique('groups')->ignore($request->id),
-                Rule::unique('groups')->ignore($request->id)->where(function ($query) {
-                // Ignore soft-deleted records
-                $query->whereNull('deleted_at');
-        }),
-            ],
+        $validator = Validator::make($request->all(), [
+            'list_id' => 'required|integer|exists:data_lists,id',
+            'name' => 'required|string|max:255',
+            'order' => 'required|integer',
+            'segment' => 'required|string|max:255',
         ]);
-
 
         if ($validator->fails()) {
             return response()->json([
@@ -182,31 +164,32 @@ class GroupController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         
-        $group = Group::find($id);
+        $dataListAction = DataListAction::find($id);
 
-        if (!$group) {
+        if (!$dataListAction) {
             return response()->json([
                 'success' => false,
-                'message' => 'Group not found.',
+                'message' => 'Data List Action not found.',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $group->name = $request->name;
-        $group->save();
+        $dataListAction->list_id = $request->list_id;
+        $dataListAction->name = $request->name;
+        $dataListAction->order = $request->order;
+        $dataListAction->segment = $request->segment;
+        $dataListAction->save();
 
-        $userLog = new UserLogController();
-        $userLog->insertUpdateLog('group', $group->id);
 
-        $groupData = QueryBuilder::for(Group::class)
-            ->where('id', $group->id)
+         $dataListActionValue = QueryBuilder::for(DataListAction::class)
+            ->where('id', $dataListAction->id)
             ->with([
-                'forms',
+                'dataList',
             ])->first();
 
         return response()->json([
             'success' => true,
-            'message' => 'Group updated successfully',
-            'data' => $groupData,
+            'message' => 'Data list action updated successfully',
+            'data' => $dataListActionValue,
         ], Response::HTTP_OK);
     }
 
@@ -215,19 +198,19 @@ class GroupController extends Controller
      */
     public function destroy(string $id)
     {
-        $group = Group::find($id);
+        $dataListAction = DataListAction::find($id);
 
-        if (!$group) {
+        if (!$dataListAction) {
             return response()->json([
                 'success' => false,
-                'message' => 'Group not found.',
+                'message' => 'Data list action not found.',
             ], Response::HTTP_NOT_FOUND);
         }
 
-        $group->delete();
+        $dataListAction->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Group deleted successfully.',
+            'message' => 'Data list action deleted successfully.',
         ], Response::HTTP_OK);
     }
 

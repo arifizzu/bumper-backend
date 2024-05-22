@@ -23,7 +23,9 @@ class DataListController extends Controller
         ->with([
             'items',
             'filters',
+            'actions',
             'form',
+            'group',
         ])
         ->get();
 
@@ -46,6 +48,7 @@ class DataListController extends Controller
                 'title' => '',
                 'description' => '',
                 'form_id' => '',
+                'group_id' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -59,6 +62,7 @@ class DataListController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'form_id' => 'nullable|integer|exists:forms,id',
+            'group_id' => 'nullable|integer|exists:groups,id',
         ]);
 
         if ($validator->fails()) {
@@ -72,6 +76,7 @@ class DataListController extends Controller
         $dataList->title = $request->title;
         $dataList->description = $request->description;
         $dataList->form_id = $request->form_id;
+        $dataList->group_id = $request->group_id;
         $dataList->save();
 
 
@@ -80,7 +85,9 @@ class DataListController extends Controller
             ->with([
                 'items',
                 'filters',
+                'actions',
                 'form',
+                'group',
             ])->first();
 
         return response()->json([
@@ -100,7 +107,9 @@ class DataListController extends Controller
             ->with([
                 'items',
                 'filters',
+                'actions',
                 'form',
+                'group',
             ])->first();
 
         if (!$dataList){
@@ -127,7 +136,9 @@ class DataListController extends Controller
             ->with([
                 'items',
                 'filters',
+                'actions',
                 'form',
+                'group',
             ])->first();
 
 
@@ -145,6 +156,7 @@ class DataListController extends Controller
                 'title' => $dataList->title,
                 'description' => $dataList->description,
                 'form_id' => $dataList->form_id,
+                'group_id' => $dataList->group_id,
             ],
         ], Response::HTTP_OK);
     }
@@ -158,6 +170,7 @@ class DataListController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'form_id' => 'nullable|integer|exists:forms,id',
+            'group_id' => 'nullable|integer|exists:groups,id',
         ]);
 
         if ($validator->fails()) {
@@ -179,6 +192,7 @@ class DataListController extends Controller
         $dataList->title = $request->title;
         $dataList->description = $request->description;
         $dataList->form_id = $request->form_id;
+        $dataList->group_id = $request->group_id;
         $dataList->save();
 
 
@@ -187,7 +201,9 @@ class DataListController extends Controller
             ->with([
                 'items',
                 'filters',
+                'actions',
                 'form',
+                'group',
             ])->first();
 
         return response()->json([

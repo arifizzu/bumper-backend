@@ -28,4 +28,9 @@ class Group extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function dataLists() : HasMany
+    {
+        return $this->hasMany(DataList::class);
+    }
 }
