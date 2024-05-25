@@ -199,6 +199,46 @@ class DataListFilterController extends Controller
         ], Response::HTTP_OK);
     }
 
+     public function updateOrder(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'order' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        $dataListFilter = DataListFilter::find($id);
+
+        if (!$dataListFilter) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data List Filter not found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $dataListFilter->order = $request->order;
+        $dataListFilter->save();
+
+
+         $dataListFilterValue = QueryBuilder::for(DataListFilter::class)
+            ->where('id', $dataListFilter->id)
+            ->with([
+                'dataList',
+            ])->first();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data list filter order updated successfully',
+            'data' => $dataListFilterValue,
+        ], Response::HTTP_OK);
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */

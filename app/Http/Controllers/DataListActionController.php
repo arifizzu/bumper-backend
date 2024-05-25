@@ -193,6 +193,45 @@ class DataListActionController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function updateOrder(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'order' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        $dataListAction = DataListAction::find($id);
+
+        if (!$dataListAction) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data List Action not found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $dataListAction->order = $request->order;
+        $dataListAction->save();
+
+
+         $dataListActionValue = QueryBuilder::for(DataListAction::class)
+            ->where('id', $dataListAction->id)
+            ->with([
+                'dataList',
+            ])->first();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data list action order updated successfully',
+            'data' => $dataListActionValue,
+        ], Response::HTTP_OK);
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -211,6 +211,45 @@ class DataListItemController extends Controller
         ], Response::HTTP_OK);
     }
 
+        public function updateOrder(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'order' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+        
+        $dataListItem = DataListItem::find($id);
+
+        if (!$dataListItem) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data List Item not found.',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        $dataListItem->order = $request->order;
+        $dataListItem->save();
+
+
+         $dataListItemValue = QueryBuilder::for(DataListItem::class)
+            ->where('id', $dataListItem->id)
+            ->with([
+                'dataList',
+            ])->first();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data list item order updated successfully',
+            'data' => $dataListItemValue,
+        ], Response::HTTP_OK);
+    }
+
     /**
      * Remove the specified resource from storage.
      */
