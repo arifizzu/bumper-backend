@@ -42,8 +42,9 @@ class DataListActionController extends Controller
             'message' => 'Get data list action form successfully',
             'form' => [
                 'list_id' => '',
-                'name' => '',
+                'label' => '',
                 'segment' => '',
+                'type'=> '',
                 'order' => '',
             ],
         ], Response::HTTP_OK);
@@ -56,8 +57,9 @@ class DataListActionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'list_id' => 'required|integer|exists:data_lists,id',
-            'name' => 'required|string|max:255',
+            'label' => 'required|string|max:255',
             'segment' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
             'order' => 'required|integer',
         ]);
 
@@ -70,9 +72,10 @@ class DataListActionController extends Controller
 
         $dataListAction = new DataListAction();
         $dataListAction->list_id = $request->list_id;
-        $dataListAction->name = $request->name;
+        $dataListAction->label = $request->label;
         $dataListAction->order = $request->order;
         $dataListAction->segment = $request->segment;
+        $dataListAction->type = $request->type;
         $dataListAction->save();
 
 
@@ -138,9 +141,10 @@ class DataListActionController extends Controller
             'message' => 'Get data list action form successfully',
             'form' => [
                 'list_id' => $dataListAction->list_id,
-                'name' => $dataListAction->name,
+                'label' => $dataListAction->label,
                 'order' => $dataListAction->order,
                 'segment' => $dataListAction->segment,
+                'type' => $dataListAction->type,
             ],
         ], Response::HTTP_OK);
     }
@@ -152,9 +156,10 @@ class DataListActionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'list_id' => 'required|integer|exists:data_lists,id',
-            'name' => 'required|string|max:255',
+            'label' => 'required|string|max:255',
             'order' => 'required|integer',
             'segment' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -174,9 +179,10 @@ class DataListActionController extends Controller
         }
 
         $dataListAction->list_id = $request->list_id;
-        $dataListAction->name = $request->name;
+        $dataListAction->label = $request->label;
         $dataListAction->order = $request->order;
         $dataListAction->segment = $request->segment;
+        $dataListAction->type = $request->type;
         $dataListAction->save();
 
 

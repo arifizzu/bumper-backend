@@ -68,7 +68,8 @@ return new class extends Migration
                 ->references('id')          // data list id
                 ->on('data_lists')
                 ->onDelete('cascade');
-            $table->string('name');
+            $table->string('label');
+            $table->string('type');
             $table->string('segment');
             $table->integer('order');
             $table->timestamps();
