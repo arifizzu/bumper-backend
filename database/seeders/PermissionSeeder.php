@@ -28,6 +28,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'edit permission']);
         Permission::create(['name' => 'delete permission']);
 
+        Permission::create(['name' => 'use form']);
         Permission::create(['name' => 'view form']);
         Permission::create(['name' => 'create form']);
         Permission::create(['name' => 'edit form']);
@@ -38,6 +39,7 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'edit process']);
         Permission::create(['name' => 'delete process']);
 
+        Permission::create(['name' => 'use datalist']);
         Permission::create(['name' => 'view datalist']);
         Permission::create(['name' => 'create datalist']);
         Permission::create(['name' => 'edit datalist']);

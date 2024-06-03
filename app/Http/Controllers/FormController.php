@@ -22,9 +22,7 @@ class FormController extends Controller
     {
         $forms = QueryBuilder::for(Form::class)
             ->with([
-                // 'formTemplate',
                 'fields',
-                // 'activities',
                 'group',
                 'createdBy',
             ])->get();
@@ -59,7 +57,6 @@ class FormController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            // 'short_name' => 'required|string|max:255|unique:forms',
             'short_name' => 'required|string|max:255',
             'group_id' => 'nullable|integer|exists:groups,id',
         ]);
