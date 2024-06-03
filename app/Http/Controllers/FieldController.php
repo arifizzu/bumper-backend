@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Carbon\Carbon;
 
 use App\Models\Field;
 use App\Models\FieldLocation;
@@ -247,4 +248,66 @@ class FieldController extends Controller
             'message' => 'Field deleted successfully.',
         ], Response::HTTP_OK);
     }
+
+     public function insertDataInDatabase(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            '*.table_name' => 'required|string|max:255',
+            '*.column_name' => 'required|string|max:255',
+            '*.data' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        try {
+            // Begin a transaction
+            DB::beginTransaction();
+
+            // Group data entries by table_name
+            $groupedData = [];
+            foreach ($request->all() as $entry) {
+                $tableName = $entry['table_name'];
+                $columnName = $entry['column_name'];
+                $data = $entry['data'];
+
+                if (!isset($groupedData[$tableName])) {
+                    $groupedData[$tableName] = [
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
+                $groupedData[$tableName][$columnName] = $data;
+            }
+
+            // Insert grouped data into the database
+            foreach ($groupedData as $tableName => $data) {
+                DB::table($tableName)->insert($data);
+            }
+
+            // Commit the transaction
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data inserted successfully',
+            ], Response::HTTP_CREATED);
+        } catch (\Exception $e) {
+            // Rollback the transaction if any error occurs
+            DB::rollback();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to insert data',
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+
 }

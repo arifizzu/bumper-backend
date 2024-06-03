@@ -123,6 +123,7 @@ Route::prefix('/fields')->middleware(['auth:api'])->group(function () {
     Route::get('/individual/{id}/edit', [FieldController::class, 'edit'])->middleware(['permission:edit form']);
     Route::put('/individual/{id}', [FieldController::class, 'update'])->middleware(['permission:edit form']);
     Route::delete('/individual/{id}', [FieldController::class, 'destroy'])->middleware(['permission:delete form']);
+    Route::post('/insertData', [FieldController::class, 'insertDataInDatabase'])->middleware(['permission:use form']);
     });
 
 Route::prefix('/fields-locations')->middleware(['auth:api'])->group(function () {
