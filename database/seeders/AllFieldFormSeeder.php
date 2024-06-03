@@ -87,7 +87,7 @@ class AllFieldFormSeeder extends Seeder
             'type_id' => 4,
             'is_required' => true,
             'table_name' => 'demo_customers',
-            'column_name' => null,
+            'column_name' => "status",
         ]);
 
         FieldLocation::create([
@@ -116,7 +116,7 @@ class AllFieldFormSeeder extends Seeder
             'type_id' => 5,
             'is_required' => true,
             'table_name' => 'demo_customers',
-            'column_name' => null,
+            'column_name' => "condition",
         ]);
 
         FieldLocation::create([
@@ -140,12 +140,12 @@ class AllFieldFormSeeder extends Seeder
         ]);
 
         Field::create([
-            'caption' => 'Suiz',
+            'caption' => 'Is Worker',
             'form_id' => 4,
             'type_id' => 6,
             'is_required' => true,
-            'table_name' => null,
-            'column_name' => null,
+            'table_name' => "demo_customers",
+            'column_name' => "is_worker_switch",
         ]);
 
         FieldLocation::create([
@@ -231,7 +231,7 @@ class AllFieldFormSeeder extends Seeder
             'type_id' => 10,
             'is_required' => true,
             'table_name' => 'demo_customers',
-            'column_name' => 'created_at',
+            'column_name' => 'time',
         ]);
 
         FieldLocation::create([

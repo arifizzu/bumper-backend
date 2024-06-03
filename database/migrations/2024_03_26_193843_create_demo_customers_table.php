@@ -20,6 +20,10 @@ return new class extends Migration
             $table->unsignedInteger('age')->nullable();
             $table->date('birthday')->nullable();
             $table->date('date_met')->nullable();
+            $table->string('status')->nullable();
+            $table->boolean('is_worker_switch')->nullable();
+            $table->string('condition')->nullable();
+            $table->time('time')->nullable();
             $table->string('email')->nullable();
             $table->string('password')->nullable();
             $table->rememberToken();
