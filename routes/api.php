@@ -124,7 +124,7 @@ Route::prefix('/fields')->middleware(['auth:api'])->group(function () {
     Route::put('/individual/{id}', [FieldController::class, 'update'])->middleware(['permission:edit form']);
     Route::delete('/individual/{id}', [FieldController::class, 'destroy'])->middleware(['permission:delete form']);
     Route::post('/insertData', [FieldController::class, 'insertDataInDatabase'])->middleware(['permission:use form']);
-    });
+});
 
 Route::prefix('/fields-locations')->middleware(['auth:api'])->group(function () {
     Route::get('/', [FieldLocationController::class, 'index'])->middleware(['permission:view form']);
@@ -214,6 +214,7 @@ Route::prefix('/datalist')->middleware(['auth:api'])->group(function () {
         Route::get('/{id}/edit', [DataListController::class, 'edit'])->middleware(['permission:edit datalist']);
         Route::put('/{id}', [DataListController::class, 'update'])->middleware(['permission:edit datalist']);
         Route::delete('/{id}', [DataListController::class, 'destroy'])->middleware(['permission:delete datalist']);
+        Route::post('/retrieveData', [DataListController::class, 'retrieveDataFromDatabase'])->middleware(['permission:use datalist']);
     });
 
 Route::prefix('/datalist-item')->middleware(['auth:api'])->group(function () {

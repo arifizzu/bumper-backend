@@ -234,4 +234,49 @@ class DataListController extends Controller
         ], Response::HTTP_OK);
     }
 
+    public function retrieveDataFromDatabase(Request $request)
+    {
+        $validatedData = $request->validate([
+            '*.column_key' => 'required|string',
+            '*.table_name' => 'required|string',
+            '*.column_name' => 'required|string',
+        ]);
+
+        $result = [];
+
+        foreach ($validatedData as $item) {
+            $columnKey = $item['column_key'];
+            $tableName = $item['table_name'];
+            $columnName = $item['column_name'];
+
+             $queryResult = DB::table($tableName)
+            ->select($columnKey, $columnName)
+            ->whereNull('deleted_at')  // Check for soft deleted records
+            ->get();
+
+            foreach ($queryResult as $row) {
+                $keyValue = $row->$columnKey;
+
+                if (!isset($result[$keyValue])) {
+                    $result[$keyValue] = [];
+                }
+
+                $result[$keyValue][$columnName] = $row->$columnName;
+            }
+        }
+
+        if (empty($result)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Get data successfully',
+            'data' => $result,
+        ], Response::HTTP_OK);
+    }
+
 }

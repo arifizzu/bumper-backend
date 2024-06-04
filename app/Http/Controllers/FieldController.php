@@ -307,7 +307,5 @@ class FieldController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
+    
 }
