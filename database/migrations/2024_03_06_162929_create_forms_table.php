@@ -51,6 +51,22 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        Schema::create('forms_logs', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')          // user id
+                ->on('users')
+                ->onDelete('cascade');
+            $table->unsignedBigInteger('form_id');
+            $table->foreign('form_id')
+                ->references('id')          // form id
+                ->on('forms')
+                ->onDelete('cascade');
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -58,6 +74,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('forms_logs');
         Schema::dropIfExists('forms');
         Schema::dropIfExists('forms_templates');
         Schema::dropIfExists('groups');

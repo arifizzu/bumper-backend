@@ -17,7 +17,7 @@ class DatabaseRetrievalController extends Controller
         $tables = Schema::getConnection()->getDoctrineSchemaManager()->listTableNames();
 
         $tablesToExclude = ['activities', 'activities_relations', 'activities_locations', 'conditions', 'failed_jobs', 'fields', 'fields_locations', 'fields_lists_values',
-         'fields_types','forms', 'forms_templates', 'groups', 'migrations', 'model_has_permissions', 'model_has_roles', 'participants',
+         'fields_types','forms', 'forms_templates', 'forms_logs', 'groups', 'migrations', 'model_has_permissions', 'model_has_roles', 'participants',
          'participant_is_role', 'participant_is_user', 'password_reset_tokens', 'permissions', 'personal_access_tokens', 'processes',
         'roles', 'role_has_permissions', 'users', 'users_logs', 'data_lists', 'data_lists_actions', 'data_lists_filters', 'data_lists_items'];
 

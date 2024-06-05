@@ -24,6 +24,8 @@ use App\Http\Controllers\DataListController;
 use App\Http\Controllers\DataListItemController;
 use App\Http\Controllers\DataListFilterController;
 use App\Http\Controllers\DataListActionController;
+use App\Http\Controllers\UserLogController;
+use App\Http\Controllers\FormLogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,15 @@ Route::prefix('/auth')->group(function () {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::get('/me', [AuthController::class, 'me']);
     });
+
+Route::prefix('/users-log')->middleware(['auth:api'])->group(function () {
+    Route::get('/showUserLog', [UserLogController::class, 'showUserLog']);
+  });
+
+Route::prefix('/forms-log')->middleware(['auth:api'])->group(function () {
+    Route::get('/showFormLog', [FormLogController::class, 'showFormLog']);
+    Route::post('/insertFormLog', [FormLogController::class, 'insertCreateLog'])->middleware(['permission:use form']);
+  });
 
 Route::prefix('/users')->middleware(['auth:api'])->group(function () {
         Route::get('/', [UserController::class, 'index'])->middleware(['permission:view user']);
