@@ -202,6 +202,8 @@ class FormController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $userLog = new UserLogController();
+        $userLog->insertDeleteLog('form', $form->id);
         $form->delete();
         return response()->json([
             'success' => true,

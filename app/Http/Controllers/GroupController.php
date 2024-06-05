@@ -224,6 +224,8 @@ class GroupController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $userLog = new UserLogController();
+        $userLog->insertDeleteLog('group', $group->id);
         $group->delete();
         return response()->json([
             'success' => true,

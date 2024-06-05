@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\QueryBuilder;
 use Symfony\Component\HttpFoundation\Response;
 
+use App\Http\Controllers\UserLogController;
 use App\Models\DataList;
 
 class DataListController extends Controller
@@ -79,6 +80,8 @@ class DataListController extends Controller
         $dataList->group_id = $request->group_id;
         $dataList->save();
 
+        $userLog = new UserLogController();
+        $userLog->insertCreateLog('datalist', $dataList->id);
 
          $dataListValue = QueryBuilder::for(DataList::class)
             ->where('id', $dataList->id)
@@ -195,6 +198,8 @@ class DataListController extends Controller
         $dataList->group_id = $request->group_id;
         $dataList->save();
 
+        $userLog = new UserLogController();
+        $userLog->insertUpdateLog('datalist', $dataList->id);
 
          $dataListValue = QueryBuilder::for(DataList::class)
             ->where('id', $dataList->id)
@@ -226,6 +231,9 @@ class DataListController extends Controller
                 'message' => 'Data list not found.',
             ], Response::HTTP_NOT_FOUND);
         }
+
+        $userLog = new UserLogController();
+        $userLog->insertDeleteLog('datalist', $dataList->id);
 
         $dataList->delete();
         return response()->json([

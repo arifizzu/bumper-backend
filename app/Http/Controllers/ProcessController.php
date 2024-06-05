@@ -207,6 +207,8 @@ class ProcessController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
+        $userLog = new UserLogController();
+        $userLog->insertDeleteLog('process', $process->id);
         $process->delete();
         return response()->json([
             'success' => true,
