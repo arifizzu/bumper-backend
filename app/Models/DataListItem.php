@@ -21,6 +21,8 @@ class DataListItem extends Model
         'table_name',
         'column_name',
         'is_hidden',
+        'include_filter',
+        'filter_type',
     ];
 
     public function dataList() : BelongsTo

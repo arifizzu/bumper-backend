@@ -48,6 +48,8 @@ class DataListItemController extends Controller
                 'table_name' => '',
                 'column_name' => '',
                 'is_hidden' => '',
+                'include_filter' => '',
+                'filter_type' => '',
             ],
         ], Response::HTTP_OK);
     }
@@ -65,6 +67,8 @@ class DataListItemController extends Controller
             'table_name' => 'required|string|max:255',
             'column_name' => 'required|string|max:255',
             'is_hidden' => 'required|boolean',
+            'include_filter' => 'required|boolean',
+            'filter_type' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -82,6 +86,8 @@ class DataListItemController extends Controller
         $dataListItem->table_name = $request->table_name;
         $dataListItem->column_name = $request->column_name;
         $dataListItem->is_hidden = $request->is_hidden;
+        $dataListItem->include_filter = $request->include_filter;
+        $dataListItem->filter_type = $request->filter_type;
         $dataListItem->save();
 
 
@@ -153,7 +159,10 @@ class DataListItemController extends Controller
                 'table_name' => $dataListItem->table_name,
                 'column_name' => $dataListItem->column_name,
                 'is_hidden' => $dataListItem->is_hidden,
+                'include_filter' => $dataListItem->include_filter,
+                'filter_type' => $dataListItem->filter_type,
             ],
+            
         ], Response::HTTP_OK);
     }
 
@@ -170,6 +179,8 @@ class DataListItemController extends Controller
             'table_name' => 'required|string|max:255',
             'column_name' => 'required|string|max:255',
             'is_hidden' => 'required|boolean',
+            'include_filter' => 'required|boolean',
+            'filter_type' => 'nullable|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -195,6 +206,8 @@ class DataListItemController extends Controller
         $dataListItem->table_name = $request->table_name;
         $dataListItem->column_name = $request->column_name;
         $dataListItem->is_hidden = $request->is_hidden;
+        $dataListItem->include_filter = $request->include_filter;
+        $dataListItem->filter_type = $request->filter_type;
         $dataListItem->save();
 
 

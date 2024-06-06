@@ -42,6 +42,8 @@ return new class extends Migration
             $table->string('table_name');
             $table->string('column_name');
             $table->boolean('is_hidden');
+            $table->boolean('include_filter');
+            $table->string('filter_type')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
