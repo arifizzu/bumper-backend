@@ -94,9 +94,10 @@ class UserLogController extends Controller
     public function showUserLog(Request $request)
     {
         $userLogs = QueryBuilder::for(UserLog::class)
-                ->whereHas('user', function ($query) {
-                    $query->where('id', '!=', 1);
-                })
+                ->withTrashed()
+                // ->whereHas('user', function ($query) {
+                //     $query->where('id', '!=', 1);
+                // })
                 ->with('user')
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -105,16 +106,16 @@ class UserLogController extends Controller
         $userLogs->each(function ($log) {
             switch ($log->type) {
                 case 'form':
-                    $log->related = Form::find($log->change_id);
+                    $log->related = Form::withTrashed()->find($log->change_id); // Include soft-deleted forms
                     break;
                 case 'datalist':
-                    $log->related = Datalist::find($log->change_id);
+                    $log->related = Datalist::withTrashed()->find($log->change_id); // Include soft-deleted datalists
                     break;
                 case 'process':
-                    $log->related = Process::find($log->change_id);
+                    $log->related = Process::withTrashed()->find($log->change_id); // Include soft-deleted processes
                     break;
                 case 'group':
-                    $log->related = Group::find($log->change_id);
+                    $log->related = Group::withTrashed()->find($log->change_id); // Include soft-deleted groups
                     break;
                 default:
                     $log->related = null;

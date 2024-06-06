@@ -57,6 +57,7 @@ class FormLogController extends Controller
     public function showFormLog(Request $request)
     {
         $formLog = QueryBuilder::for(FormLog::class)
+            ->withTrashed()
              ->with([
                 'user',
                 'form',
