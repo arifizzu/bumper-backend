@@ -18,19 +18,19 @@ class UserSeeder extends Seeder
     {
         $admin = User::factory()->create([
             'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@bumper.com',
         ]);
         $admin->assignRole('admin');
 
         $user = User::factory()->create([
             'name' => 'Admin 2',
-            'email' => 'admin2@example.com',
+            'email' => 'admin2@bumper.com',
         ]);
         $user->assignRole('admin');
 
         $user2 = User::factory()->create([
             'name' => 'Staff 1',
-            'email' => 'staff@example.com',
+            'email' => 'staff1@bumper.com',
         ]);
         $user2->assignRole('user');
         $user->givePermissionTo('view user');
