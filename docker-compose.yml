@@ -4,7 +4,7 @@ networks:
     bumper:
 
 services:
-    bumper_site:
+    site:
         env_file:
             - .env
         build:
@@ -19,11 +19,11 @@ services:
         volumes:
             - ./:/var/www/html:delegated
         depends_on:
-            - bumper_php
+            - php
         networks:
             - bumper
 
-    bumper_php:
+    php:
         env_file:
             - .env
         build:
@@ -38,7 +38,7 @@ services:
         networks:
             - bumper
 
-    bumper_composer:
+    composer:
         env_file:
             - .env
         build:
@@ -52,13 +52,13 @@ services:
             - ./:/var/www/html:delegated
         working_dir: /var/www/html
         depends_on:
-            - bumper_php
+            - php
         user: laravel
         entrypoint: ["composer", "--ignore-platform-reqs"]
         networks:
             - bumper
 
-    bumper_artisan:
+    artisan:
         env_file:
             - .env
         build:
