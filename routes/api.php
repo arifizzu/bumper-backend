@@ -107,10 +107,10 @@ Route::prefix('/groups')->middleware(['auth:api'])->group(function () {
     });
 
 Route::prefix('/forms')->middleware(['auth:api'])->group(function () {
-    Route::get('/', [FormController::class, 'index'])->middleware(['permission:view form']);
+    Route::get('/', [FormController::class, 'index'])->middleware(['permission:view form|use form']);
     Route::get('/create', [FormController::class, 'create'])->middleware(['permission:create form']);
     Route::post('/', [FormController::class, 'store'])->middleware(['permission:create form']);
-    Route::get('/{id}', [FormController::class, 'show'])->middleware(['permission:view form']);
+    Route::get('/{id}', [FormController::class, 'show'])->middleware(['permission:view form|use form']);
     Route::get('/{id}/edit', [FormController::class, 'edit'])->middleware(['permission:edit form']);
     Route::put('/{id}', [FormController::class, 'update'])->middleware(['permission:edit form']);
     Route::delete('/{id}', [FormController::class, 'destroy'])->middleware(['permission:delete form']);
@@ -218,10 +218,10 @@ Route::prefix('/participants')->middleware(['auth:api'])->group(function () {
     });
 
 Route::prefix('/datalist')->middleware(['auth:api'])->group(function () {
-        Route::get('/', [DataListController::class, 'index'])->middleware(['permission:view datalist']);
+        Route::get('/', [DataListController::class, 'index'])->middleware(['permission:view datalist|use datalist']);
         Route::get('/create', [DataListController::class, 'create'])->middleware(['permission:create datalist']);
         Route::post('/', [DataListController::class, 'store'])->middleware(['permission:create datalist']);
-        Route::get('/{id}', [DataListController::class, 'show'])->middleware(['permission:view datalist']);
+        Route::get('/{id}', [DataListController::class, 'show'])->middleware(['permission:view datalist|use datalist']);
         Route::get('/{id}/edit', [DataListController::class, 'edit'])->middleware(['permission:edit datalist']);
         Route::put('/{id}', [DataListController::class, 'update'])->middleware(['permission:edit datalist']);
         Route::delete('/{id}', [DataListController::class, 'destroy'])->middleware(['permission:delete datalist']);
