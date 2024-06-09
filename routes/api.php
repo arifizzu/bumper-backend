@@ -97,13 +97,13 @@ Route::prefix('/permissions')->middleware(['auth:api'])->group(function () {
     });
 
 Route::prefix('/groups')->middleware(['auth:api'])->group(function () {
-    Route::get('/', [GroupController::class, 'index'])->middleware(['permission:view form']);
-    Route::get('/create', [GroupController::class, 'create'])->middleware(['permission:create form']);
-    Route::post('/', [GroupController::class, 'store'])->middleware(['permission:create form']);
-    Route::get('/{id}', [GroupController::class, 'show'])->middleware(['permission:view form']);
-    Route::get('/{id}/edit', [GroupController::class, 'edit'])->middleware(['permission:edit form']);
-    Route::put('/{id}', [GroupController::class, 'update'])->middleware(['permission:edit form']);
-    Route::delete('/{id}', [GroupController::class, 'destroy'])->middleware(['permission:delete form']);
+    Route::get('/', [GroupController::class, 'index'])->middleware(['permission:view form|view datalist']);
+    Route::get('/create', [GroupController::class, 'create'])->middleware(['permission:create form|create datalist']);
+    Route::post('/', [GroupController::class, 'store'])->middleware(['permission:create form|create datalist']);
+    Route::get('/{id}', [GroupController::class, 'show'])->middleware(['permission:view form|view datalist']);
+    Route::get('/{id}/edit', [GroupController::class, 'edit'])->middleware(['permission:edit form|edit datalist']);
+    Route::put('/{id}', [GroupController::class, 'update'])->middleware(['permission:edit form|edit datalist']);
+    Route::delete('/{id}', [GroupController::class, 'destroy'])->middleware(['permission:delete form|delete datalist']);
     });
 
 Route::prefix('/forms')->middleware(['auth:api'])->group(function () {
