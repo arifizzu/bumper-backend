@@ -52,7 +52,7 @@ class AuthController extends Controller
         $user = QueryBuilder::for(User::class)
             ->where('email', $credentials['email'])
             ->with([
-                'roles',
+                'roles.permissions',
                 'permissions',
             ])->first();
 
@@ -66,10 +66,22 @@ class AuthController extends Controller
 
         $token = auth()->attempt($credentials);
 
+        // Collect roles and their permissions
+        $roles = $user->roles->pluck('name');
+
+         // Collect permissions from roles
+        $rolePermissions = $user->roles->flatMap(function($role) {
+            return $role->permissions;
+        });
+
+        // Merge role permissions with direct permissions and remove duplicates
+        $allPermissions = $user->permissions->merge($rolePermissions)->pluck('name')->unique();
+
+
         return response()->json([
             'user' => auth()->user(),
-            'roles' => $user->roles,
-            'permissions' => $user->permissions,
+            'roles' => $roles,
+            'permissions' => $allPermissions->values(),
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60
