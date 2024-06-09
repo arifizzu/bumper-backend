@@ -26,7 +26,6 @@ return new class extends Migration
             $table->time('time')->nullable();
             $table->string('email')->nullable();
             $table->string('password')->nullable();
-            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,9 +37,26 @@ return new class extends Migration
             $table->unsignedInteger('item_price')->nullable();
             $table->date('manufactured_date')->nullable();
             $table->date('expired_date')->nullable();
+            $table->date('delivered_date')->nullable();
             $table->string('delivered_from')->nullable();
             $table->string('deliver_to')->nullable();
-            $table->rememberToken();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('demo_feedbacks', function (Blueprint $table) {
+            $table->id();
+            $table->string('full_name')->nullable();
+            $table->string('email')->nullable();
+            $table->unsignedInteger('age')->nullable();
+            $table->string('gender')->nullable();
+            $table->string('store_visited')->nullable();
+            $table->date('date_visited')->nullable();
+            $table->string('product_bought')->nullable();
+            $table->unsignedInteger('total_spend')->nullable();
+            $table->string('rating_scale')->nullable();
+            $table->string('expectation_met')->nullable();  
+            $table->string('feedback')->nullable();  
             $table->timestamps();
             $table->softDeletes();
         });
@@ -51,7 +67,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('demo_feedbacks');
         Schema::dropIfExists('demo_customers');
-         Schema::dropIfExists('demo_items');
+        Schema::dropIfExists('demo_items');
     }
 };
