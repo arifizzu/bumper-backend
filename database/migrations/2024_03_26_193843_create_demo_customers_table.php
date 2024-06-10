@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->unsignedInteger('age')->nullable();
             $table->date('birthday')->nullable();
+            $table->string('location')->nullable();
+            $table->string('item_type')->nullable();
             $table->date('date_met')->nullable();
             $table->string('status')->nullable();
             $table->boolean('is_worker_switch')->nullable();
@@ -55,8 +57,8 @@ return new class extends Migration
             $table->string('product_bought')->nullable();
             $table->unsignedInteger('total_spend')->nullable();
             $table->string('rating_scale')->nullable();
-            $table->string('expectation_met')->nullable();  
-            $table->string('feedback')->nullable();  
+            $table->string('expectation_met')->nullable();
+            $table->string('feedback')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
