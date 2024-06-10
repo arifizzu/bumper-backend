@@ -25,8 +25,8 @@ class UserLogController extends Controller
     public function insertCreateLog(string $type, string $change_id)
     {
         $userLog = new UserLog();
-        $userLog->user_id = Auth::id(); 
-        $userLog->action = "create"; 
+        $userLog->user_id = Auth::id();
+        $userLog->action = "create";
         $userLog->type = $type;
         $userLog->change_id = $change_id;
         $userLog->save();
@@ -47,8 +47,8 @@ class UserLogController extends Controller
     public function insertUpdateLog(string $type, string $change_id)
     {
         $userLog = new UserLog();
-        $userLog->user_id = Auth::id(); 
-        $userLog->action = "update"; 
+        $userLog->user_id = Auth::id();
+        $userLog->action = "update";
         $userLog->type = $type;
         $userLog->change_id = $change_id;
         $userLog->save();
@@ -69,8 +69,8 @@ class UserLogController extends Controller
     public function insertDeleteLog(string $type, string $change_id)
     {
         $userLog = new UserLog();
-        $userLog->user_id = Auth::id(); 
-        $userLog->action = "delete"; 
+        $userLog->user_id = Auth::id();
+        $userLog->action = "delete";
         $userLog->type = $type;
         $userLog->change_id = $change_id;
         $userLog->save();
@@ -94,15 +94,17 @@ class UserLogController extends Controller
     public function showUserLog(Request $request)
     {
         $userLogs = QueryBuilder::for(UserLog::class)
-                ->withTrashed()
-                // ->whereHas('user', function ($query) {
-                //     $query->where('id', '!=', 1);
-                // })
-                ->with('user')
-                ->orderBy('created_at', 'desc')
-                ->get();
+            ->withTrashed()
+            // ->whereHas('user', function ($query) {
+            //     $query->where('id', '!=', 1);
+            // })
+            ->with(['user' => function ($query) {
+                $query->withTrashed(); // Includes soft-deleted users
+            }])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-            // Load the related model data based on the type
+        // Load the related model data based on the type
         $userLogs->each(function ($log) {
             switch ($log->type) {
                 case 'form':
@@ -129,5 +131,4 @@ class UserLogController extends Controller
             'data' => $userLogs,
         ], Response::HTTP_OK);
     }
-
 }

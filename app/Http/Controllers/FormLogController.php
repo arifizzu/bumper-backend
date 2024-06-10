@@ -20,7 +20,7 @@ class FormLogController extends Controller
      */
     public function insertCreateLog(Request $request)
     {
-         $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'user_id' => 'required|integer|exists:users,id',
             'form_id' => 'required|integer|exists:forms,id',
         ]);
@@ -33,8 +33,8 @@ class FormLogController extends Controller
         }
 
         $formLog = new FormLog();
-        $formLog->user_id = $request->user_id; 
-        $formLog->form_id = $request->form_id; 
+        $formLog->user_id = $request->user_id;
+        $formLog->form_id = $request->form_id;
         $formLog->save();
 
         $formLogData = QueryBuilder::for(FormLog::class)
@@ -57,11 +57,16 @@ class FormLogController extends Controller
     public function showFormLog(Request $request)
     {
         $formLog = QueryBuilder::for(FormLog::class)
-            ->withTrashed()
-             ->with([
-                'user',
-                'form',
-            ])->get();
+            ->withTrashed() // Includes soft-deleted FormLog entries
+            ->with([
+                'user' => function ($query) {
+                    $query->withTrashed(); // Includes soft-deleted users
+                },
+                'form' => function ($query) {
+                    $query->withTrashed(); // Includes soft-deleted forms
+                },
+            ])
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -69,5 +74,4 @@ class FormLogController extends Controller
             'data' => $formLog,
         ], Response::HTTP_OK);
     }
-
 }
